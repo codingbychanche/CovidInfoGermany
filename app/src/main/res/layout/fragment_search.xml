@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cardview_light_background"
+    tools:context=".ui.home.FragmentSearch">
+
+    <!--
+    <SearchView
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:iconifiedByDefault="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:queryHint="@string/hint_auto_complete" />
+       -->
+
+    <AutoCompleteTextView
+        android:id="@+id/search_querry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/hint_auto_complete"
+        android:inputType="textCapWords"
+        app:layout_constraintTop_toTopOf="@+id/do_search"
+        tools:layout_editor_absoluteX="8dp" />
+
+    <ImageButton
+        android:id="@+id/do_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00ffffff"
+        android:src="@android:drawable/ic_search_category_default"
+        app:layout_constraintEnd_toStartOf="@+id/clear_search"
+        tools:layout_editor_absoluteY="13dp"></ImageButton>
+
+    <ProgressBar
+        android:id="@+id/progress_waiting_for_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ProgressBar>
+
+    <ImageButton
+        android:id="@+id/clear_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="1dp"
+        android:src="@android:drawable/ic_input_delete"
+        app:layout_constraintBottom_toBottomOf="@+id/do_search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/do_search"></ImageButton>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/covid_data"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingTop="10dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_querry"></androidx.recyclerview.widget.RecyclerView>
+</androidx.constraintlayout.widget.ConstraintLayout>

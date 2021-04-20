@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ background_gradient.xml
+  ~
+  ~ Created by Berthold Fritz
+  ~
+  ~ This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  ~ https://creativecommons.org/licenses/by-nc-sa/4.0/
+  ~
+  ~ Last modified 7/7/19 8:18 PM
+  -->
+
+<!--    Defines a custom shape which can be used as a background drawable
+        Inside a 'Button'
+-->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:dither="true"
+    android:shape="rectangle">
+
+    <size
+        android:height="200dp"
+        android:width="500dp" />
+
+    <gradient
+        android:startColor="#ffffff"
+        android:endColor="#eeeeee"
+        android:angle="90"
+        android:type="linear"/>
+
+    <stroke
+        android:width="1dp"
+        android:color="@color/cardview_light_background" />
+
+    <padding
+        android:top="5dp"
+        android:left="5dp"
+        android:bottom="5dp"
+        android:right="5dp"/>
+</shape>

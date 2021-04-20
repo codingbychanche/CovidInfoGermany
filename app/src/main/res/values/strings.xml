@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Covid Info</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <!-- Home Fragment -->
+    <string name="hint_input_city">Landkreis/ Stadt/ Bundesland</string>
+    <string name="hint_auto_complete">Suche</string>
+
+
+    <!-- Info Fragment -->
+    <!-- @rem:Shows hot to include html- strings into a string resource file@@ -->
+    <string name="info">
+
+        <![CDATA[
+            <p><h1>Covid Info App</h1></p>
+
+            <p>Meine erste App, von der ich hoffe, dass sie bald überflüssig wird.....</p>
+
+            <p>Innerhalb Deutschlands kann von der Land- oder Stadtkreisebene bis zur Stadt gesucht werden. Die
+            wesentlichen Daten die im Zusammenhang mit der Pandemie interessant sein könnten, werden angezeigt.</p>
+
+            <p>Die daten werden über eine öffentlich Datenbank abgerufen. Die Webseite findet sich hier:<br>
+            <a href="https://public.opendatasoft.com/explore/dataset/covid-19-germany-landkreise/api/?q=Karlsruhe&location=11,49.05812,8.41793&basemap=jawg.streets">opendatasoft</p>
+        ]]>
+        </string>
+</resources>
