@@ -5,6 +5,7 @@ import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -19,14 +20,12 @@ import java.util.List;
 
 public class FragmentLocalData extends Fragment  {
 
-    // Interface
-
-
     // ViewModel
     static LocalViewViewModel localViewViewModel;
 
     // UI
     TextView townView,bezView,bundeslandView,casesPer10KView,lasUpdateView;
+    ProgressBar updatingView;
 
     public FragmentLocalData() {
         // Empty!
@@ -47,20 +46,23 @@ public class FragmentLocalData extends Fragment  {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // The view model(s)
         localViewViewModel= ViewModelProviders.of(requireActivity()).get(LocalViewViewModel.class);
-        localViewViewModel.getCovidData("Landau Stadt");
+
+        // UI
+        updatingView =view.findViewById(R.id.is_updating_progress);
         townView =view.findViewById(R.id.town);
         bezView=view.findViewById(R.id.bez);
         bundeslandView=view.findViewById(R.id.bundesland);
         casesPer10KView=view.findViewById(R.id.cases_per_10K);
         lasUpdateView=view.findViewById(R.id.last_update);
 
-        //
-        // Live data observers
-        //
-        // Receives the search result.
-        //
+        // Update data
+        localViewViewModel.getCovidData("Landau Stadt");
 
+        //
+        // Receives the data, matching your location.
+        //
         localViewViewModel.updateCovidData().observe(getViewLifecycleOwner(), new Observer<List<SearchResultData>>() {
             @Override
             public void onChanged(@Nullable List<SearchResultData> searchResultData) {
@@ -77,5 +79,20 @@ public class FragmentLocalData extends Fragment  {
                 }
             }
         });
+
+        //
+        // Progress bar, visible while updating the data
+        //
+        localViewViewModel.updating().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isUpdating) {
+                if (isUpdating)
+                    updatingView.setVisibility(View.VISIBLE);
+                else
+                    updatingView.setVisibility(View.GONE);
+            }
+        });
+
+
     }
 }

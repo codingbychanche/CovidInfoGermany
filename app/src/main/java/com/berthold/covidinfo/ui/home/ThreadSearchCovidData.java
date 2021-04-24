@@ -6,21 +6,20 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Struct;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThreadGetCovidData {
+public class ThreadSearchCovidData {
 
     private static int numberOfThreads = 0;
     private static boolean isCancheled;
 
-    private static ThreadGetCovidData getCovidData;
+    private static ThreadSearchCovidData getCovidData;
     private static String apiAddressStadtkreise, searchQuery;
     private static getCovidDataInterface gC;
 
-    public ThreadGetCovidData() {
+    public ThreadSearchCovidData() {
     }
 
     /**
@@ -34,14 +33,14 @@ public class ThreadGetCovidData {
      * @param sQ The search query.
      * @return An instance of this class or null.
      */
-    public static ThreadGetCovidData getInstance(getCovidDataInterface g, String sK, String sQ) {
+    public static ThreadSearchCovidData getInstance(getCovidDataInterface g, String sK, String sQ) {
         if (numberOfThreads == 0 && !sQ.isEmpty()) {
             isCancheled = false;
             gC = g;
             apiAddressStadtkreise = sK;
             searchQuery = sQ;
             numberOfThreads++;
-            getCovidData = new ThreadGetCovidData();
+            getCovidData = new ThreadSearchCovidData();
             return getCovidData;
         }
         Log.v("CANCELCANCEL", "No Thread");
@@ -97,7 +96,6 @@ public class ThreadGetCovidData {
      * Stop this thread.
      */
     public void cancel() {
-
         isCancheled = true;
         numberOfThreads = 0;
     }

@@ -1,7 +1,6 @@
 package com.berthold.covidinfo.ui.home;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,11 +42,10 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
 
     private AutoCompleteTextView searchQueryView;
 
-    //
+    // A list of previously, successful search query's
     String[] searchSuggestions;
 
-
-    public View onCreateView(@NonNull LayoutInflater inflater,
+        public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         // Inflate
         View root = inflater.inflate(R.layout.fragment_search, container, false);
@@ -101,7 +99,7 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
                 if (!sq.isEmpty()) {
                     fragmentSearchViewModel.lastSearchQueryEntered = sq;
                     waitingForCovidDataView.setVisibility(View.VISIBLE);
-                    fragmentSearchViewModel.getCovidData(sq);
+                    fragmentSearchViewModel.searchCovidData(sq);
                 }
             }
         });
@@ -117,6 +115,7 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
 
         /**
          * Receive result of network query.
+         * Updates the search history.
          *
          * Invoked vy {@link fragmentSearchViewModel.getCovidData()}
          */
@@ -146,6 +145,6 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
 
     @Override
     public void listItemClicked(SearchResultData searchResultData){
-        fragmentFavCovidDataViewModel.favCovidDataLocation.postValue(searchResultData);
+        fragmentFavCovidDataViewModel.getFavLocationCovidData(searchResultData.getName());
     }
 }

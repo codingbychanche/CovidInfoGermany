@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentSearchViewModel =new ViewModelProvider(this).get(FragmentSearchViewModel.class);
         fragmentFavCovidDataViewModel=new ViewModelProvider(this).get(FragmentFavCovidDataViewModel.class);
 
-        // Get shared preferences
+        // Restore each view model's shared preferences...
         fragmentSearchViewModel.restoreFromSharedPreferences(this);
         fragmentFavCovidDataViewModel.restoreFromSharedPreferences(this);
 

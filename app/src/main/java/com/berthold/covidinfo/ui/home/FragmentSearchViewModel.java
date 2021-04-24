@@ -3,22 +3,13 @@ package com.berthold.covidinfo.ui.home;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.berthold.covidinfo.MainActivity;
-import com.berthold.covidinfo.R;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,7 +17,7 @@ import java.util.Set;
 /**
  * This view model handles all search query's
  */
-public class FragmentSearchViewModel extends ViewModel implements ThreadGetCovidData.getCovidDataInterface {
+public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCovidData.getCovidDataInterface {
 
     public MutableLiveData<List<SearchResultData>> covidDataAsJson;
     public String lastSearchQueryEntered;
@@ -43,16 +34,15 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadGetCovid
         return covidDataAsJson;
     }
 
-
     /**
      * Gets the data via the api from the network.
      */
-    public void getCovidData(String searchQuery) {
+    public void searchCovidData(String searchQuery) {
         String apiAddressStadtkreise = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=covid-19-germany-landkreise&q={0}&facet=last_update&facet=name&facet=rs&facet=bez&facet=bl";
 
         // Starts the database connection, gets the data and invokes the
         // dedicated interface when completed.
-        ThreadGetCovidData gd = ThreadGetCovidData.getInstance(this, apiAddressStadtkreise, searchQuery);
+        ThreadSearchCovidData gd = ThreadSearchCovidData.getInstance(this, apiAddressStadtkreise, searchQuery);
         if (gd != null) {
             gd.cancel();
             gd.getCovid();
@@ -60,7 +50,8 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadGetCovid
     }
 
     /**
-     * Receives the data from the network connection.
+     * Receives the data from the network connection and
+     * updates the UI via the observer....
      *
      * @param covidData
      */
@@ -77,8 +68,6 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadGetCovid
      * @return Updated search history.
      */
     public String[] updateSearchHistory(List<SearchResultData> searchResultData) {
-
-        searchHistory = new HashSet<String>();
 
         if (searchResultData.size() > 0) {
             for (SearchResultData r : searchResultData) {
