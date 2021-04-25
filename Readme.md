@@ -6,10 +6,6 @@ This may be a useful App for some or it may not (depending on how strongly one t
 
 The app uses an api provided by [Open Data Soft, Covid 19 Pandemic- Germany- Data by Landkreise](https://public.opendatasoft.com/explore/dataset/covid-19-germany-landkreise/api/?q=Karlsruhe&location=11,49.05812,8.41793&basemap=jawg.streets)
 
-![](SHot_1.png)
-
-![](Shot_2.png)
-
 ![](Shot_3.png)
 
 
