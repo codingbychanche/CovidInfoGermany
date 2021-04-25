@@ -1,6 +1,7 @@
 package com.berthold.covidinfo.ui.home;
 
 public class SearchResultData {
+
     private String bundesland,name,bez;
     private double casesPer1K;
     private String lastUpdate;

@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Covid Info</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">Suche</string>
+    <string name="title_dashboard">Statistik</string>
+    <string name="title_notifications">Info</string>
 
     <!-- Home Fragment -->
     <string name="hint_input_city">Landkreis/ Stadt/ Bundesland</string>
@@ -21,8 +21,10 @@
             <p>Innerhalb Deutschlands kann von der Land- oder Stadtkreisebene bis zur Stadt gesucht werden. Die
             wesentlichen Daten die im Zusammenhang mit der Pandemie interessant sein könnten, werden angezeigt.</p>
 
-            <p>Die daten werden über eine öffentlich Datenbank abgerufen. Die Webseite findet sich hier:<br>
+            <p>Die daten werden über eine öffentlich Datenbank abgerufen. Die Webseite findet sich hier:
             <a href="https://public.opendatasoft.com/explore/dataset/covid-19-germany-landkreise/api/?q=Karlsruhe&location=11,49.05812,8.41793&basemap=jawg.streets">opendatasoft</p>
+
+            <div>Icons erstellt von <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/de/" title="Flaticon">www.flaticon.com</a></div>
         ]]>
         </string>
 </resources>

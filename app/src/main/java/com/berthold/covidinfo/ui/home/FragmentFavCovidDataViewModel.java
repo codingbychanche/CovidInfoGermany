@@ -25,7 +25,6 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
     ThreadGetFavLocCovidData t;
     // progressbar
     private MutableLiveData<Boolean> isUpdating = new MutableLiveData<>();
-
     public MutableLiveData<Boolean> getIsUpdating() {
         return isUpdating;
     }
@@ -46,7 +45,7 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
     public void getFavLocationCovidData(String searchQuery) {
         String apiAddressStadtkreise = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=covid-19-germany-landkreise&q={0}&facet=last_update&facet=name&facet=rs&facet=bez&facet=bl";
 
-       // isUpdating.postValue(true);
+       //isUpdating.postValue(true);
 
         ThreadGetFavLocCovidData t = new ThreadGetFavLocCovidData().getInstance(apiAddressStadtkreise, searchQuery, this);
         t.get();
@@ -75,14 +74,13 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
      * @param mainActivity The context of the activity which invokes this method.
      */
     public void storeToSHaredPreffs(MainActivity mainActivity) {
-        Log.v("SHAREDSHARED", "SAVE"+favCovidDataLocation.getValue().getName());
         SharedPreferences sp;
         sp = mainActivity.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
         if (favCovidDataLocation!= null) {
             editor.putString("favLocation", favCovidDataLocation.getValue().getName());
-            editor.commit();
+            editor.apply();
         }
     }
 

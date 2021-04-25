@@ -1,15 +1,15 @@
-package com.berthold.covidinfo.ui.dashboard;
+package com.berthold.covidinfo.ui.statistics;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class DashboardViewModel extends ViewModel {
+public class StatisticsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
     public String covidDataView;
 
-    public DashboardViewModel() {
+    public StatisticsViewModel() {
         mText = new MutableLiveData<>();
     }
 

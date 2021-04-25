@@ -5,26 +5,34 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
+import java.util.logging.Handler;
 
 /**
  * This view model handles all search query's
  */
 public class LocalViewViewModel extends ViewModel implements ThreadSearchCovidData.getCovidDataInterface {
 
+    //
+    // Live data
+    //
     // Progressbar
     private MutableLiveData<Boolean> isUpdating=new MutableLiveData<>();
-
     public MutableLiveData<Boolean> updating(){
         return isUpdating;
     }
 
     // Covid data
     private MutableLiveData<List<SearchResultData>> covidDataAsJson;
-
     public LiveData<List<SearchResultData>> updateCovidData() {
         if (covidDataAsJson == null)
             covidDataAsJson = new MutableLiveData<>();
         return covidDataAsJson;
+    }
+
+    // Geo data
+    private MutableLiveData<String> localAddress=new MutableLiveData<>();
+    public MutableLiveData<String> localAddress(){
+        return localAddress;
     }
 
     /**

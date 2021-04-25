@@ -1,3 +1,2 @@
-include ':locationlibrary'
 include ':app'
 rootProject.name = "Covid Info"

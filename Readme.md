@@ -10,3 +10,7 @@ The app uses an api provided by [Open Data Soft, Covid 19 Pandemic- Germany- Dat
 
 ![](Shot_2.png)
 
+![](Shot_3.png)
+
+
+

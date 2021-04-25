@@ -1,4 +1,4 @@
-package com.berthold.covidinfo.ui.dashboard;
+package com.berthold.covidinfo.ui.statistics;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,18 +13,18 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.berthold.covidinfo.R;
 
-public class DashboardFragment extends Fragment {
+public class StatisticsFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private StatisticsViewModel statisticsViewModel;
     private TextView covidDataView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         // Get view model of the activity this fragment belongs to....
-        dashboardViewModel = ViewModelProviders.of(requireActivity()).get(DashboardViewModel.class);
+        statisticsViewModel = ViewModelProviders.of(requireActivity()).get(StatisticsViewModel.class);
 
-        View root = inflater.inflate(R.layout.fragment_show_local_data, container, false);
+        View root = inflater.inflate(R.layout.fragment_statistics, container, false);
        // covidDataView = root.findViewById(R.id.text_dashboard);
 
         return root;

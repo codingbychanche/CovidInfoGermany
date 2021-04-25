@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/cardview_light_background"
-    tools:context=".ui.dashboard.DashboardFragment">
+    tools:context=".ui.statistics.StatisticsFragment">
 
     <ProgressBar
         android:id="@+id/is_updating_progress"
@@ -25,6 +25,18 @@
         app:layout_constraintBottom_toBottomOf="@+id/last_update"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/town"></ImageView>
+
+    <TextView
+        android:id="@+id/current_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:drawableLeft="@android:drawable/ic_menu_myplaces"
+        android:hint="LOCAL ADDRESS"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/last_update"
+        app:layout_constraintTop_toBottomOf="@+id/last_update"></TextView>
 
     <TextView
         android:id="@+id/town"
