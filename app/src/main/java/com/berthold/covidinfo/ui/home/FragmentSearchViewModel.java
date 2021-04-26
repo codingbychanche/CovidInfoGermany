@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.berthold.covidinfo.MainActivity;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -19,16 +18,16 @@ import java.util.Set;
  */
 public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCovidData.getCovidDataInterface {
 
-    public MutableLiveData<List<SearchResultData>> covidDataAsJson;
+    public MutableLiveData<List<FragmentSearchResultData>> covidDataAsJson;
     public String lastSearchQueryEntered;
     public Set<String> searchHistory;
 
     /**
      * Covid data search results.
      *
-     * @return A list of {@link SearchResultData} containing the search results.
+     * @return A list of {@link FragmentSearchResultData} containing the search results.
      */
-    public LiveData<List<SearchResultData>> updateCovidData() {
+    public LiveData<List<FragmentSearchResultData>> updateCovidData() {
         if (covidDataAsJson == null)
             covidDataAsJson = new MutableLiveData<>();
         return covidDataAsJson;
@@ -56,7 +55,7 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCo
      * @param covidData
      */
     @Override
-    public void receive(List<SearchResultData> covidData) {
+    public void receive(List<FragmentSearchResultData> covidData) {
         covidDataAsJson.postValue(covidData);
     }
 
@@ -64,13 +63,13 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCo
      * This updates a list of previous successful search query's.
      * Invoked each time a successful search took place.
      *
-     * @param searchResultData Search result.
+     * @param fragmentSearchResultData Search result.
      * @return Updated search history.
      */
-    public String[] updateSearchHistory(List<SearchResultData> searchResultData) {
+    public String[] updateSearchHistory(List<FragmentSearchResultData> fragmentSearchResultData) {
 
-        if (searchResultData.size() > 0) {
-            for (SearchResultData r : searchResultData) {
+        if (fragmentSearchResultData.size() > 0) {
+            for (FragmentSearchResultData r : fragmentSearchResultData) {
                 searchHistory.add(r.getName() + ", " + r.getBez() + ", " + r.getBundesland());
             }
         }

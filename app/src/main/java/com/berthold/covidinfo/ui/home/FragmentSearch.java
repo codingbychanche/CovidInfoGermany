@@ -38,7 +38,7 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
     private RecyclerView covidDataRecyclerView;
     private RecyclerView.LayoutManager covidDataLayoutManager;
     private CovidDataAdapter covidDataAdapter;
-    private List<SearchResultData> covidDataList = new ArrayList<>();
+    private List<FragmentSearchResultData> covidDataList = new ArrayList<>();
 
     private AutoCompleteTextView searchQueryView;
 
@@ -119,20 +119,20 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
          *
          * Invoked vy {@link fragmentSearchViewModel.getCovidData()}
          */
-        fragmentSearchViewModel.updateCovidData().observe(getViewLifecycleOwner(), new Observer<List<SearchResultData>>() {
+        fragmentSearchViewModel.updateCovidData().observe(getViewLifecycleOwner(), new Observer<List<FragmentSearchResultData>>() {
             @Override
-            public void onChanged(@Nullable List<SearchResultData> searchResultData) {
+            public void onChanged(@Nullable List<FragmentSearchResultData> fragmentSearchResultData) {
 
                 covidDataList.clear();
 
-                if (searchResultData != null) {
-                    for (SearchResultData r : searchResultData) {
+                if (fragmentSearchResultData != null) {
+                    for (FragmentSearchResultData r : fragmentSearchResultData) {
                         covidDataList.add(r);
                     }
                 }
                 waitingForCovidDataView.setVisibility(View.GONE);
                 covidDataAdapter.notifyDataSetChanged();
-                searchSuggestions = fragmentSearchViewModel.updateSearchHistory(searchResultData);
+                searchSuggestions = fragmentSearchViewModel.updateSearchHistory(fragmentSearchResultData);
 
                 ArrayAdapter<String> searchHistoryAdapter =
                         new ArrayAdapter<String>(getActivity(), R.layout.simple_list_row, R.id.suggestion_text, searchSuggestions);
@@ -144,7 +144,7 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
     }
 
     @Override
-    public void listItemClicked(SearchResultData searchResultData){
-        fragmentFavCovidDataViewModel.getFavLocationCovidData(searchResultData.getName());
+    public void listItemClicked(FragmentSearchResultData fragmentSearchResultData){
+        fragmentFavCovidDataViewModel.getFavLocationCovidData(fragmentSearchResultData.getName());
     }
 }

@@ -9,12 +9,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.berthold.covidinfo.MainActivity;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,9 +24,8 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
     }
 
     // Covid data
-    public MutableLiveData<SearchResultData> favCovidDataLocation;
-
-    public MutableLiveData<SearchResultData> updateFavLocation() {
+    public MutableLiveData<FragmentSearchResultData> favCovidDataLocation;
+    public MutableLiveData<FragmentSearchResultData> updateFavLocation() {
         if (favCovidDataLocation == null) {
             favCovidDataLocation = new MutableLiveData<>();
         }
@@ -45,7 +38,7 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
     public void getFavLocationCovidData(String searchQuery) {
         String apiAddressStadtkreise = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=covid-19-germany-landkreise&q={0}&facet=last_update&facet=name&facet=rs&facet=bez&facet=bl";
 
-       //isUpdating.postValue(true);
+       isUpdating.setValue(true);
 
         ThreadGetFavLocCovidData t = new ThreadGetFavLocCovidData().getInstance(apiAddressStadtkreise, searchQuery, this);
         t.get();
@@ -58,12 +51,14 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
      * @param covidData
      */
     @Override
-    public void getFavLocation(List<SearchResultData> covidData) {
+    public void getFavLocation(List<FragmentSearchResultData> covidData) {
         Log.v("THREADTHREAD", "Got it");
         isUpdating.postValue(false);
         if (covidData != null) {
-            SearchResultData r = covidData.get(0);
+            FragmentSearchResultData r = covidData.get(0);
             favCovidDataLocation.postValue(r);
+
+            isUpdating.setValue(false);
         }
     }
 

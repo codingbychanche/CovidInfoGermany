@@ -1,12 +1,12 @@
 package com.berthold.covidinfo.ui.home;
 
-public class SearchResultData {
+public class FragmentSearchResultData {
 
     private String bundesland,name,bez;
     private double casesPer1K;
     private String lastUpdate;
 
-    public SearchResultData(String bundesland, String name, String bez, double casesPer1K,String lastUpdate) {
+    public FragmentSearchResultData(String bundesland, String name, String bez, double casesPer1K, String lastUpdate) {
         this.bundesland = bundesland;
         this.name = name;
         this.bez = bez;

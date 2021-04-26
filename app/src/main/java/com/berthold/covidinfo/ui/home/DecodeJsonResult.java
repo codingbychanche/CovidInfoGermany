@@ -7,6 +7,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import javaUtils.FormatTimeStamp;
+
 /**
  * A collection of methods to decode the search result from
  * https://public.opendatasoft.com Covid 19 data for germany, landkreise.
@@ -15,15 +17,15 @@ import java.util.List;
 public class DecodeJsonResult {
 
     /**
-     * Gets all records from a json string and decodes them into {@link SearchResultData}
+     * Gets all records from a json string and decodes them into {@link FragmentSearchResultData}
      * objects and adds them to a list.
      *
      * @param jsonString
-     * @return List of {@link SearchResultData} objects containing the field's of each record from the specified json string.
+     * @return List of {@link FragmentSearchResultData} objects containing the field's of each record from the specified json string.
      */
-    public static List<SearchResultData> getResult(String jsonString){
+    public static List<FragmentSearchResultData> getResult(String jsonString){
         int numberOfResults=getHits(jsonString);
-        List <SearchResultData> result=new ArrayList<>();
+        List <FragmentSearchResultData> result=new ArrayList<>();
 
 
         for (int n=0;n<=numberOfResults-1;n++){
@@ -35,8 +37,11 @@ public class DecodeJsonResult {
                 String name=json.getString("name");
                 String bez=json.getString("bez");
                 int casesPer100K=json.getInt("cases7_per_100k");
+
                 String lastUpdate=json.getString("last_update");
-                SearchResultData d=new SearchResultData(bl,name,bez,casesPer100K,lastUpdate);
+                String lastUpdateFormated=FormatTimeStamp.german(lastUpdate,true);
+
+                FragmentSearchResultData d=new FragmentSearchResultData(bl,name,bez,casesPer100K,lastUpdateFormated);
                 result.add(d);
 
             }catch(JSONException e){

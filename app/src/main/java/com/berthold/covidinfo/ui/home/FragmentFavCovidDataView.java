@@ -47,7 +47,7 @@ public class FragmentFavCovidDataView extends Fragment {
         fragmentFavCovidDataViewModel = ViewModelProviders.of(requireActivity()).get(FragmentFavCovidDataViewModel.class);
         fragmentSearchViewModel = ViewModelProviders.of(requireActivity()).get(FragmentSearchViewModel.class);
 
-        updatingView=view.findViewById(R.id.is_updating_progress);
+        updatingView=view.findViewById(R.id.fav_loction_is_updating);
         townView = view.findViewById(R.id.town);
         bezView = view.findViewById(R.id.bez);
         bundeslandView = view.findViewById(R.id.bundesland);
@@ -59,11 +59,9 @@ public class FragmentFavCovidDataView extends Fragment {
          *
          * Invoked by {@link fragmentFavCovidDataViewModel}
          */
-        fragmentFavCovidDataViewModel.updateFavLocation().observe(getViewLifecycleOwner(), new Observer<SearchResultData>() {
+        fragmentFavCovidDataViewModel.updateFavLocation().observe(getViewLifecycleOwner(), new Observer<FragmentSearchResultData>() {
             @Override
-            public void onChanged(SearchResultData r) {
-
-                fragmentFavCovidDataViewModel.getFavLocationCovidData(r.getName());
+            public void onChanged(FragmentSearchResultData r) {
 
                 townView.setText(r.getName());
                 bezView.setText(r.getBez());

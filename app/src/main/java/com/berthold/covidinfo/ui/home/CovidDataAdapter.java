@@ -2,13 +2,11 @@ package com.berthold.covidinfo.ui.home;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.berthold.covidinfo.R;
@@ -21,14 +19,14 @@ import java.util.List;
  */
 public class CovidDataAdapter extends RecyclerView.Adapter<CovidDataAdapter.ViewHolder> {
 
-    private List<SearchResultData> searchResultDataList = new ArrayList<>();
+    private List<FragmentSearchResultData> fragmentSearchResultDataList = new ArrayList<>();
     private Context context;
     private Resources resources;
     private CovidDataSearchResult clicked;
 
 
-    public CovidDataAdapter(List<SearchResultData> searchResultDataList, Context context, CovidDataSearchResult clicked) {
-        this.searchResultDataList = searchResultDataList;
+    public CovidDataAdapter(List<FragmentSearchResultData> fragmentSearchResultDataList, Context context, CovidDataSearchResult clicked) {
+        this.fragmentSearchResultDataList = fragmentSearchResultDataList;
         this.context = context;
         this.clicked=clicked;
 
@@ -49,7 +47,7 @@ public class CovidDataAdapter extends RecyclerView.Adapter<CovidDataAdapter.View
     }
 
     interface CovidDataSearchResult {
-        void listItemClicked(SearchResultData resultData);
+        void listItemClicked(FragmentSearchResultData resultData);
     }
 
     // Create new views (invoked by the layout manager)
@@ -67,7 +65,7 @@ public class CovidDataAdapter extends RecyclerView.Adapter<CovidDataAdapter.View
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clicked.listItemClicked(searchResultDataList.get(position));
+                clicked.listItemClicked(fragmentSearchResultDataList.get(position));
             }
         });
 
@@ -77,18 +75,18 @@ public class CovidDataAdapter extends RecyclerView.Adapter<CovidDataAdapter.View
         TextView updated = holder.mView.findViewById(R.id.last_update);
         TextView casesPer10K = holder.mView.findViewById(R.id.cases_per_10K);
 
-        town.setText(searchResultDataList.get(position).getName());
-        bez.setText(searchResultDataList.get(position).getBez());
-        bundesland.setText(searchResultDataList.get(position).getBundesland());
-        updated.setText(searchResultDataList.get(position).getLastUpdate());
-        casesPer10K.setText(searchResultDataList.get(position).getCasesPer10K() + "");
+        town.setText(fragmentSearchResultDataList.get(position).getName());
+        bez.setText(fragmentSearchResultDataList.get(position).getBez());
+        bundesland.setText(fragmentSearchResultDataList.get(position).getBundesland());
+        updated.setText(fragmentSearchResultDataList.get(position).getLastUpdate());
+        casesPer10K.setText(fragmentSearchResultDataList.get(position).getCasesPer10K() + "");
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        if (searchResultDataList != null)
-            return searchResultDataList.size();
+        if (fragmentSearchResultDataList != null)
+            return fragmentSearchResultDataList.size();
         return 0;
     }
 }

@@ -8,14 +8,22 @@
     tools:context=".ui.statistics.StatisticsFragment">
 
     <ProgressBar
-        android:id="@+id/is_updating_progress"
-        android:visibility="gone"
+        android:id="@+id/fav_loction_is_updating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></ProgressBar>
+        android:layout_marginStart="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="@+id/imageView2"></ProgressBar>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/remark_currentness"
+        app:layout_constraintStart_toStartOf="@+id/bundesland"
+        app:layout_constraintTop_toBottomOf="@+id/bundesland"></TextView>
 
     <ImageView
         android:id="@+id/imageView2"
@@ -69,8 +77,8 @@
         style="@style/DialogBoxTextBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
         android:hint="UPDATED"
-        app:layout_constraintStart_toStartOf="@+id/bundesland"
-        app:layout_constraintTop_toBottomOf="@+id/bundesland"></TextView>
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="@+id/textView"></TextView>
 </androidx.constraintlayout.widget.ConstraintLayout>
