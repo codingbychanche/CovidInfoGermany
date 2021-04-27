@@ -36,6 +36,8 @@ public class FragmentLocalData extends Fragment implements LocationListener {
 
     private LocationManager locationManager;
     private String provider;
+    private static final int UPDATE_LOCATION_EVERY_MS = 1000 * 60 * 2; // Update location every 2 Min's...
+
 
     // ViewModel
     static FragmentLocalDataViewModel fragmentLocalDataViewModel;
@@ -81,6 +83,7 @@ public class FragmentLocalData extends Fragment implements LocationListener {
         //
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
+
         Criteria criteria = new Criteria();
         provider = locationManager.getBestProvider(criteria, false);
 
@@ -105,8 +108,6 @@ public class FragmentLocalData extends Fragment implements LocationListener {
         }
 
         fragmentLocalDataViewModel.getLocationIsUpdating().setValue(true);
-
-
 
         /*
          * Live data receivers.
@@ -194,7 +195,7 @@ public class FragmentLocalData extends Fragment implements LocationListener {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, UPDATE_LOCATION_EVERY_MS, 1, this);
     }
 
     @Override
@@ -208,33 +209,46 @@ public class FragmentLocalData extends Fragment implements LocationListener {
      */
     @Override
     public void onLocationChanged(Location location) {
-        double lat = location.getLatitude();
-        double lng = location.getLongitude();
-        String addressLine, adminArea, city;
 
-        Geocoder geocoder;
-        geocoder = new Geocoder(getContext(), Locale.getDefault());
+        Log.v("LOCLOC", "Changed...");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                double lat=54;
+                double lng=0;
+                String addressLine;
+                final String adminArea;
+                final String city;
 
-        try {
-            fragmentLocalDataViewModel.getLocationIsUpdating().setValue(true);
+                try {
+                    fragmentLocalDataViewModel.getLocationIsUpdating().postValue(true);
 
-            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
-            addressLine = addresses.get(0).getAddressLine(0);
-            city = addresses.get(0).getLocality();
-            adminArea = addresses.get(0).getAdminArea();
-            Log.v("LOCLOC", adminArea + "   " + city);
+                    if (location!=null) {
+                        lat =location.getLatitude();
+                        lng = location.getLongitude();
+                    }
+                    Geocoder geocoder;
+                    geocoder = new Geocoder(getContext(), Locale.getDefault());
 
-            // Gets the covid data from the network connection
-            fragmentLocalDataViewModel.getCovidData(city + " " + adminArea);
+                    List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+                    addressLine = addresses.get(0).getAddressLine(0);
+                    city = addresses.get(0).getLocality();
+                    adminArea = addresses.get(0).getAdminArea();
 
-            // This invokes the associated observer
-            fragmentLocalDataViewModel.localAddress().setValue(addressLine);
 
-        } catch (Exception e) {
+                    // Gets the covid data from the network connection
+                    fragmentLocalDataViewModel.getCovidData(city + " " + adminArea);
 
-        }
+                    // This invokes the associated observer
+                    fragmentLocalDataViewModel.localAddress().postValue(addressLine);
 
-        fragmentLocalDataViewModel.getLocationIsUpdating().setValue(false);
+                    fragmentLocalDataViewModel.getLocationIsUpdating().postValue(false);
+
+                } catch (Exception e) {
+                    Log.v("LOCLOC", "Error " + e.toString());
+                }
+            }
+        }).start();
     }
 
     @Override
