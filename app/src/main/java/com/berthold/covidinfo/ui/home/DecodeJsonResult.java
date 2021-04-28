@@ -17,15 +17,15 @@ import javaUtils.FormatTimeStamp;
 public class DecodeJsonResult {
 
     /**
-     * Gets all records from a json string and decodes them into {@link FragmentSearchResultData}
+     * Gets all records from a json string and decodes them into {@link CovidSearchResultData}
      * objects and adds them to a list.
      *
      * @param jsonString
-     * @return List of {@link FragmentSearchResultData} objects containing the field's of each record from the specified json string.
+     * @return List of {@link CovidSearchResultData} objects containing the field's of each record from the specified json string.
      */
-    public static List<FragmentSearchResultData> getResult(String jsonString){
+    public static List<CovidSearchResultData> getResult(String jsonString){
         int numberOfResults=getHits(jsonString);
-        List <FragmentSearchResultData> result=new ArrayList<>();
+        List <CovidSearchResultData> result=new ArrayList<>();
 
 
         for (int n=0;n<=numberOfResults-1;n++){
@@ -41,7 +41,7 @@ public class DecodeJsonResult {
                 String lastUpdate=json.getString("last_update");
                 String lastUpdateFormated=FormatTimeStamp.german(lastUpdate,true);
 
-                FragmentSearchResultData d=new FragmentSearchResultData(bl,name,bez,casesPer100K,lastUpdateFormated);
+                CovidSearchResultData d=new CovidSearchResultData(bl,name,bez,casesPer100K,lastUpdateFormated);
                 result.add(d);
 
             }catch(JSONException e){

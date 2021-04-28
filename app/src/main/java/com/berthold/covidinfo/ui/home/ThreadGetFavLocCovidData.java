@@ -12,7 +12,7 @@ import java.util.List;
 
 
 interface FavCovidLocationData {
-    void getFavLocation(List<FragmentSearchResultData> result);
+    void getFavLocation(List<CovidSearchResultData> result);
 }
 
 public class ThreadGetFavLocCovidData {
@@ -51,7 +51,7 @@ public class ThreadGetFavLocCovidData {
 
                     String line;
 
-                    List<FragmentSearchResultData> result = new ArrayList<>();
+                    List<CovidSearchResultData> result = new ArrayList<>();
 
                     line = br.readLine();
                     covidDataBuffer.append(line);

@@ -1,24 +1,10 @@
 package com.berthold.covidinfo.ui.home;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Criteria;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.util.Log;
-
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * This view model handles all search query's
@@ -39,8 +25,8 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
     public MutableLiveData<Boolean> getLocationIsUpdating(){ return locationIsUpdating;}
 
     // Covid data
-    private MutableLiveData<List<FragmentSearchResultData>> covidDataAsJson;
-    public LiveData<List<FragmentSearchResultData>> updateCovidData() {
+    private MutableLiveData<List<CovidSearchResultData>> covidDataAsJson;
+    public LiveData<List<CovidSearchResultData>> updateCovidData() {
         if (covidDataAsJson == null)
             covidDataAsJson = new MutableLiveData<>();
         return covidDataAsJson;
@@ -76,7 +62,7 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
      * @param covidData
      */
     @Override
-    public void receive(List<FragmentSearchResultData> covidData) {
+    public void receive(List<CovidSearchResultData> covidData) {
         networkIsUpdating.postValue(false);
         covidDataAsJson.postValue(covidData);
     }

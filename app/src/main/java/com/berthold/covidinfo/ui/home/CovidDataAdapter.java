@@ -14,19 +14,16 @@ import com.berthold.covidinfo.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- */
 public class CovidDataAdapter extends RecyclerView.Adapter<CovidDataAdapter.ViewHolder> {
 
-    private List<FragmentSearchResultData> fragmentSearchResultDataList = new ArrayList<>();
+    private List<CovidSearchResultData> covidSearchResultDataList = new ArrayList<>();
     private Context context;
     private Resources resources;
     private CovidDataSearchResult clicked;
 
 
-    public CovidDataAdapter(List<FragmentSearchResultData> fragmentSearchResultDataList, Context context, CovidDataSearchResult clicked) {
-        this.fragmentSearchResultDataList = fragmentSearchResultDataList;
+    public CovidDataAdapter(List<CovidSearchResultData> covidSearchResultDataList, Context context, CovidDataSearchResult clicked) {
+        this.covidSearchResultDataList = covidSearchResultDataList;
         this.context = context;
         this.clicked=clicked;
 
@@ -47,7 +44,7 @@ public class CovidDataAdapter extends RecyclerView.Adapter<CovidDataAdapter.View
     }
 
     interface CovidDataSearchResult {
-        void listItemClicked(FragmentSearchResultData resultData);
+        void listItemClicked(CovidSearchResultData resultData);
     }
 
     // Create new views (invoked by the layout manager)
@@ -65,7 +62,7 @@ public class CovidDataAdapter extends RecyclerView.Adapter<CovidDataAdapter.View
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clicked.listItemClicked(fragmentSearchResultDataList.get(position));
+                clicked.listItemClicked(covidSearchResultDataList.get(position));
             }
         });
 
@@ -75,18 +72,20 @@ public class CovidDataAdapter extends RecyclerView.Adapter<CovidDataAdapter.View
         TextView updated = holder.mView.findViewById(R.id.last_update);
         TextView casesPer10K = holder.mView.findViewById(R.id.cases_per_10K);
 
-        town.setText(fragmentSearchResultDataList.get(position).getName());
-        bez.setText(fragmentSearchResultDataList.get(position).getBez());
-        bundesland.setText(fragmentSearchResultDataList.get(position).getBundesland());
-        updated.setText(fragmentSearchResultDataList.get(position).getLastUpdate());
-        casesPer10K.setText(fragmentSearchResultDataList.get(position).getCasesPer10K() + "");
+        town.setText(covidSearchResultDataList.get(position).getName());
+        bez.setText(covidSearchResultDataList.get(position).getBez());
+        bundesland.setText(covidSearchResultDataList.get(position).getBundesland());
+        updated.setText(covidSearchResultDataList.get(position).getLastUpdate());
+        casesPer10K.setText(covidSearchResultDataList.get(position).getCasesPer10K() + "");
+
+        casesPer10K.setTextColor(covidSearchResultDataList.get(position).getCasesPer1KColorCode());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        if (fragmentSearchResultDataList != null)
-            return fragmentSearchResultDataList.size();
+        if (covidSearchResultDataList != null)
+            return covidSearchResultDataList.size();
         return 0;
     }
 }

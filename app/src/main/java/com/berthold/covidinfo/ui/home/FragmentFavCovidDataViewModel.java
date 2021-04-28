@@ -24,8 +24,8 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
     }
 
     // Covid data
-    public MutableLiveData<FragmentSearchResultData> favCovidDataLocation;
-    public MutableLiveData<FragmentSearchResultData> updateFavLocation() {
+    public MutableLiveData<CovidSearchResultData> favCovidDataLocation;
+    public MutableLiveData<CovidSearchResultData> updateFavLocation() {
         if (favCovidDataLocation == null) {
             favCovidDataLocation = new MutableLiveData<>();
         }
@@ -51,11 +51,11 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
      * @param covidData
      */
     @Override
-    public void getFavLocation(List<FragmentSearchResultData> covidData) {
+    public void getFavLocation(List<CovidSearchResultData> covidData) {
         Log.v("THREADTHREAD", "Got it");
         isUpdating.postValue(false);
         if (covidData != null) {
-            FragmentSearchResultData r = covidData.get(0);
+            CovidSearchResultData r = covidData.get(0);
             favCovidDataLocation.postValue(r);
 
             isUpdating.setValue(false);
@@ -74,7 +74,7 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
         SharedPreferences.Editor editor = sp.edit();
 
         if (favCovidDataLocation!= null) {
-            editor.putString("favLocation", favCovidDataLocation.getValue().getName());
+            editor.putString("favLocation", favCovidDataLocation.getValue().getName()+" "+favCovidDataLocation.getValue().getBez()+" "+favCovidDataLocation.getValue().getBundesland());
             editor.apply();
         }
     }

@@ -10,7 +10,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -122,18 +120,21 @@ public class FragmentLocalData extends Fragment implements LocationListener {
         //
         //Receives the covid data from the network.
         //
-        fragmentLocalDataViewModel.updateCovidData().observe(getViewLifecycleOwner(), new Observer<List<FragmentSearchResultData>>() {
+        fragmentLocalDataViewModel.updateCovidData().observe(getViewLifecycleOwner(), new Observer<List<CovidSearchResultData>>() {
             @Override
-            public void onChanged(@Nullable List<FragmentSearchResultData> fragmentSearchResultData) {
+            public void onChanged(@Nullable List<CovidSearchResultData> covidSearchResultData) {
 
                 fragmentLocalDataViewModel.getLocationIsUpdating().setValue(false);
 
-                if (fragmentSearchResultData != null) {
-                    for (FragmentSearchResultData r : fragmentSearchResultData) {
+                if (covidSearchResultData != null) {
+                    for (CovidSearchResultData r : covidSearchResultData) {
                         townView.setText(r.getName());
                         bezView.setText(r.getBez());
                         bundeslandView.setText(r.getBundesland());
+
                         casesPer10KView.setText(r.getCasesPer10K() + "");
+                        casesPer10KView.setTextColor(CovidDataCasesColorCoder.getColor((int)r.getCasesPer10K()));
+
                         lasUpdateView.setText(r.getLastUpdate());
                     }
                 }
@@ -245,7 +246,7 @@ public class FragmentLocalData extends Fragment implements LocationListener {
                     fragmentLocalDataViewModel.getLocationIsUpdating().postValue(false);
 
                 } catch (Exception e) {
-                    Log.v("LOCLOC", "Error " + e.toString());
+                    fragmentLocalDataViewModel.localAddress().postValue("Ups, on error occured where it should not..."+e.toString());
                 }
             }
         }).start();

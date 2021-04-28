@@ -1,12 +1,12 @@
 package com.berthold.covidinfo.ui.home;
 
-public class FragmentLocalDataAdressModel {
+public class FragmentLocalDataAddressModel {
     /**
      * Creates a new address- instance
      */
     private String address,city,state,postalCode;
 
-    public FragmentLocalDataAdressModel(String address, String city, String state, String postalCode) {
+    public FragmentLocalDataAddressModel(String address, String city, String state, String postalCode) {
         this.address = address;
         this.city = city;
         this.state = state;

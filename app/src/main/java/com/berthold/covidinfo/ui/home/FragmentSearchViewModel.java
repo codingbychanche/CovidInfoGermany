@@ -18,16 +18,16 @@ import java.util.Set;
  */
 public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCovidData.getCovidDataInterface {
 
-    public MutableLiveData<List<FragmentSearchResultData>> covidDataAsJson;
+    public MutableLiveData<List<CovidSearchResultData>> covidDataAsJson;
     public String lastSearchQueryEntered;
     public Set<String> searchHistory;
 
     /**
      * Covid data search results.
      *
-     * @return A list of {@link FragmentSearchResultData} containing the search results.
+     * @return A list of {@link CovidSearchResultData} containing the search results.
      */
-    public LiveData<List<FragmentSearchResultData>> updateCovidData() {
+    public LiveData<List<CovidSearchResultData>> updateCovidData() {
         if (covidDataAsJson == null)
             covidDataAsJson = new MutableLiveData<>();
         return covidDataAsJson;
@@ -55,7 +55,7 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCo
      * @param covidData
      */
     @Override
-    public void receive(List<FragmentSearchResultData> covidData) {
+    public void receive(List<CovidSearchResultData> covidData) {
         covidDataAsJson.postValue(covidData);
     }
 
@@ -63,13 +63,13 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCo
      * This updates a list of previous successful search query's.
      * Invoked each time a successful search took place.
      *
-     * @param fragmentSearchResultData Search result.
+     * @param covidSearchResultData Search result.
      * @return Updated search history.
      */
-    public String[] updateSearchHistory(List<FragmentSearchResultData> fragmentSearchResultData) {
+    public String[] updateSearchHistory(List<CovidSearchResultData> covidSearchResultData) {
 
-        if (fragmentSearchResultData.size() > 0) {
-            for (FragmentSearchResultData r : fragmentSearchResultData) {
+        if (covidSearchResultData.size() > 0) {
+            for (CovidSearchResultData r : covidSearchResultData) {
                 searchHistory.add(r.getName() + ", " + r.getBez() + ", " + r.getBundesland());
             }
         }

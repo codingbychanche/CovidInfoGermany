@@ -1,17 +1,23 @@
 package com.berthold.covidinfo.ui.home;
 
-public class FragmentSearchResultData {
+import android.content.res.Resources;
+import android.graphics.Color;
 
-    private String bundesland,name,bez;
+public class CovidSearchResultData {
+
+    private String bundesland, name, bez;
     private double casesPer1K;
     private String lastUpdate;
+    private int casesPer1KColorCode;
 
-    public FragmentSearchResultData(String bundesland, String name, String bez, double casesPer1K, String lastUpdate) {
+    public CovidSearchResultData(String bundesland, String name, String bez, double casesPer1K, String lastUpdate) {
         this.bundesland = bundesland;
         this.name = name;
         this.bez = bez;
         this.casesPer1K = casesPer1K;
-        this.lastUpdate=lastUpdate;
+        this.lastUpdate = lastUpdate;
+
+       casesPer1KColorCode=CovidDataCasesColorCoder.getColor((int)casesPer1K);
     }
 
     public String getBundesland() {
@@ -46,9 +52,21 @@ public class FragmentSearchResultData {
         this.casesPer1K = casesPer10K;
     }
 
-    public void setLastUpdate(String lastUpdate){ this.lastUpdate=lastUpdate;}
+    public void setLastUpdate(String lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
 
-    public String getLastUpdate (){return lastUpdate;}
+    public String getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public int getCasesPer1KColorCode() {
+        return casesPer1KColorCode;
+    }
+
+    public void setCasesPer1KColorCode(int casesPer1KColorCode) {
+        this.casesPer1KColorCode = casesPer1KColorCode;
+    }
 }
 
 

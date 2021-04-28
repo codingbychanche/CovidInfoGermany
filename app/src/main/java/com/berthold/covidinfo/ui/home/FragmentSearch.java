@@ -38,14 +38,14 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
     private RecyclerView covidDataRecyclerView;
     private RecyclerView.LayoutManager covidDataLayoutManager;
     private CovidDataAdapter covidDataAdapter;
-    private List<FragmentSearchResultData> covidDataList = new ArrayList<>();
+    private List<CovidSearchResultData> covidDataList = new ArrayList<>();
 
     private AutoCompleteTextView searchQueryView;
 
     // A list of previously, successful search query's
     String[] searchSuggestions;
 
-        public View onCreateView(@NonNull LayoutInflater inflater,
+    public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         // Inflate
         View root = inflater.inflate(R.layout.fragment_search, container, false);
@@ -58,14 +58,14 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
 
         // Get view model of the activity this fragment belongs to....
         fragmentSearchViewModel = ViewModelProviders.of(requireActivity()).get(FragmentSearchViewModel.class);
-        fragmentFavCovidDataViewModel=ViewModelProviders.of(requireActivity()).get(FragmentFavCovidDataViewModel.class);
+        fragmentFavCovidDataViewModel = ViewModelProviders.of(requireActivity()).get(FragmentFavCovidDataViewModel.class);
 
         covidDataRecyclerView = (RecyclerView) view.findViewById(R.id.covid_data);
         covidDataRecyclerView.setHasFixedSize(true);
         covidDataLayoutManager = new LinearLayoutManager(getActivity());
         covidDataRecyclerView.setLayoutManager(covidDataLayoutManager);
 
-        covidDataAdapter = new CovidDataAdapter(covidDataList, getContext(),this);
+        covidDataAdapter = new CovidDataAdapter(covidDataList, getContext(), this);
         covidDataRecyclerView.setAdapter(covidDataAdapter);
 
         // UI
@@ -114,25 +114,25 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
         });
 
         /**
-         * Receive result of network query.
+         * Receives result of network query.
          * Updates the search history.
          *
-         * Invoked vy {@link fragmentSearchViewModel.getCovidData()}
+         * Invoked by {@link fragmentSearchViewModel.getCovidData()}
          */
-        fragmentSearchViewModel.updateCovidData().observe(getViewLifecycleOwner(), new Observer<List<FragmentSearchResultData>>() {
+        fragmentSearchViewModel.updateCovidData().observe(getViewLifecycleOwner(), new Observer<List<CovidSearchResultData>>() {
             @Override
-            public void onChanged(@Nullable List<FragmentSearchResultData> fragmentSearchResultData) {
+            public void onChanged(@Nullable List<CovidSearchResultData> covidSearchResultData) {
 
                 covidDataList.clear();
 
-                if (fragmentSearchResultData != null) {
-                    for (FragmentSearchResultData r : fragmentSearchResultData) {
+                if (covidSearchResultData != null) {
+                    for (CovidSearchResultData r : covidSearchResultData) {
                         covidDataList.add(r);
                     }
                 }
                 waitingForCovidDataView.setVisibility(View.GONE);
                 covidDataAdapter.notifyDataSetChanged();
-                searchSuggestions = fragmentSearchViewModel.updateSearchHistory(fragmentSearchResultData);
+                searchSuggestions = fragmentSearchViewModel.updateSearchHistory(covidSearchResultData);
 
                 ArrayAdapter<String> searchHistoryAdapter =
                         new ArrayAdapter<String>(getActivity(), R.layout.simple_list_row, R.id.suggestion_text, searchSuggestions);
@@ -143,8 +143,14 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
         });
     }
 
+    /**
+     * Invoked by {@link CovidDataAdapter} when an element inside the
+     * list of search results was clicked.
+     *
+     * @param covidSearchResultData
+     */
     @Override
-    public void listItemClicked(FragmentSearchResultData fragmentSearchResultData){
-        fragmentFavCovidDataViewModel.getFavLocationCovidData(fragmentSearchResultData.getName());
+    public void listItemClicked(CovidSearchResultData covidSearchResultData) {
+        fragmentFavCovidDataViewModel.getFavLocationCovidData(covidSearchResultData.getName()+" "+ covidSearchResultData.getBez()+" "+ covidSearchResultData.getBundesland());
     }
 }

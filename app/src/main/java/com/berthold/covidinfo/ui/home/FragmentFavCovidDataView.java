@@ -52,6 +52,7 @@ public class FragmentFavCovidDataView extends Fragment {
         bezView = view.findViewById(R.id.bez);
         bundeslandView = view.findViewById(R.id.bundesland);
         casesPer10KView = view.findViewById(R.id.cases_per_10K);
+
         lasUpdateView = view.findViewById(R.id.last_update);
 
         /**
@@ -59,14 +60,17 @@ public class FragmentFavCovidDataView extends Fragment {
          *
          * Invoked by {@link fragmentFavCovidDataViewModel}
          */
-        fragmentFavCovidDataViewModel.updateFavLocation().observe(getViewLifecycleOwner(), new Observer<FragmentSearchResultData>() {
+        fragmentFavCovidDataViewModel.updateFavLocation().observe(getViewLifecycleOwner(), new Observer<CovidSearchResultData>() {
             @Override
-            public void onChanged(FragmentSearchResultData r) {
+            public void onChanged(CovidSearchResultData r) {
 
                 townView.setText(r.getName());
                 bezView.setText(r.getBez());
                 bundeslandView.setText(r.getBundesland());
+
                 casesPer10KView.setText(r.getCasesPer10K() + "");
+                casesPer10KView.setTextColor(CovidDataCasesColorCoder.getColor((int)r.getCasesPer10K()));
+
                 lasUpdateView.setText(r.getLastUpdate());
             }
         });

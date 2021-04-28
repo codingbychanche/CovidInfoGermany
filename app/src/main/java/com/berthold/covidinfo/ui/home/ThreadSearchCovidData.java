@@ -49,7 +49,7 @@ public class ThreadSearchCovidData {
     }
 
     interface getCovidDataInterface {
-        public void receive(List<FragmentSearchResultData> result);
+        public void receive(List<CovidSearchResultData> result);
     }
 
     /**
@@ -76,7 +76,7 @@ public class ThreadSearchCovidData {
                     while ((line = br.readLine()) != null) {
                         covidDataBuffer.append(line);
                         if (isCancheled) {
-                            List<FragmentSearchResultData> result = new ArrayList<>();
+                            List<CovidSearchResultData> result = new ArrayList<>();
                             result = DecodeJsonResult.getResult(covidDataBuffer.toString());
                             gC.receive(result);
                             numberOfThreads = 0;
