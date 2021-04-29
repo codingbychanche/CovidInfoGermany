@@ -20,7 +20,7 @@ public class InfoFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         infoViewModel =
                 new ViewModelProvider(this).get(InfoViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_notifications, container, false);
+        View root = inflater.inflate(R.layout.fragment_info, container, false);
         final WebView webView = root.findViewById(R.id.info_text);
         String infoText = getResources().getText(R.string.info).toString();
         webView.loadData(infoText, "text/html", null);

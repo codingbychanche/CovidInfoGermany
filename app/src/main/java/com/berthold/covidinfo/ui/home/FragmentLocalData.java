@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.berthold.covidinfo.R;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -133,7 +134,7 @@ public class FragmentLocalData extends Fragment implements LocationListener {
                         bundeslandView.setText(r.getBundesland());
 
                         casesPer10KView.setText(r.getCasesPer10K() + "");
-                        casesPer10KView.setTextColor(CovidDataCasesColorCoder.getColor((int)r.getCasesPer10K()));
+                        casesPer10KView.setTextColor(CovidDataCasesColorCoder.getColor((int) r.getCasesPer10K()));
 
                         lasUpdateView.setText(r.getLastUpdate());
                     }
@@ -215,17 +216,21 @@ public class FragmentLocalData extends Fragment implements LocationListener {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                double lat=54;
-                double lng=0;
                 String addressLine;
+
+                double lat = 54, lng = 0;
+
                 final String adminArea;
                 final String city;
 
                 try {
                     fragmentLocalDataViewModel.getLocationIsUpdating().postValue(true);
 
-                    if (location!=null) {
-                        lat =location.getLatitude();
+                    DecimalFormat df = new DecimalFormat();
+                    df.setMaximumFractionDigits(3);
+
+                    if (location != null) {
+                        lat = location.getLatitude();
                         lng = location.getLongitude();
                     }
                     Geocoder geocoder;
@@ -246,7 +251,7 @@ public class FragmentLocalData extends Fragment implements LocationListener {
                     fragmentLocalDataViewModel.getLocationIsUpdating().postValue(false);
 
                 } catch (Exception e) {
-                    fragmentLocalDataViewModel.localAddress().postValue("Ups, on error occured where it should not..."+e.toString());
+                    fragmentLocalDataViewModel.localAddress().postValue("Ups, on error occured where it should not..." + e.toString());
                 }
             }
         }).start();

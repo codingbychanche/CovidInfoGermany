@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/cardview_light_background"
+    android:background="@drawable/rounded_corner_light_back"
     tools:context=".ui.statistics.StatisticsFragment">
 
     <ProgressBar
@@ -46,7 +46,7 @@
         android:id="@+id/current_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:layout_marginBottom="16dp"
         android:drawableLeft="@android:drawable/ic_menu_myplaces"
         android:hint="LOCAL ADDRESS"
@@ -87,8 +87,11 @@
         style="@style/DialogBoxStyleTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:textAlignment="center"
+        android:background="@drawable/rounded_corner_dark_back"
         android:hint="CASES"
-        app:layout_constraintBottom_toBottomOf="@+id/last_update"
+        app:layout_constraintBottom_toBottomOf="@+id/current_address"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/town"></TextView>
 
