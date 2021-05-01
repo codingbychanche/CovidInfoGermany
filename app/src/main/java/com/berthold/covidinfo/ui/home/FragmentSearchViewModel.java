@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.berthold.covidinfo.MainActivity;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,19 +19,33 @@ import java.util.Set;
  */
 public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCovidData.getCovidDataInterface {
 
-    public MutableLiveData<List<CovidSearchResultData>> covidDataAsJson;
     public String lastSearchQueryEntered;
-    public Set<String> searchHistory;
 
     /**
      * Covid data search results.
      *
      * @return A list of {@link CovidSearchResultData} containing the search results.
      */
+    public MutableLiveData<List<CovidSearchResultData>> covidDataAsJson;
+
     public LiveData<List<CovidSearchResultData>> updateCovidData() {
         if (covidDataAsJson == null)
             covidDataAsJson = new MutableLiveData<>();
         return covidDataAsJson;
+    }
+
+    /**
+     * The search history
+     */
+    private Set<String> s=new HashSet();
+    public MutableLiveData<Set<String>> searchHistory;
+    public LiveData<Set<String>> refreshSearchHistory() {
+        if (searchHistory == null) {
+            searchHistory = new MutableLiveData<>();
+            searchHistory.setValue(s);
+            return searchHistory;
+        }
+        return searchHistory;
     }
 
     /**
@@ -66,14 +81,15 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCo
      * @param covidSearchResultData Search result.
      * @return Updated search history.
      */
-    public String[] updateSearchHistory(List<CovidSearchResultData> covidSearchResultData) {
+    public void addToSearchHistory(List<CovidSearchResultData> covidSearchResultData) {
 
         if (covidSearchResultData.size() > 0) {
+
             for (CovidSearchResultData r : covidSearchResultData) {
-                searchHistory.add(r.getName() + ", " + r.getBez() + ", " + r.getBundesland());
+                s.add(r.getName() + ", " + r.getBez() + ", " + r.getBundesland());
             }
+            searchHistory.postValue(s);
         }
-        return searchHistory.toArray(new String[searchHistory.size()]);
     }
 
     /**
@@ -87,7 +103,10 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCo
         SharedPreferences sp;
         sp = mainActivity.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putStringSet("history", searchHistory);
+
+        Set<String> s = searchHistory.getValue();
+
+        editor.putStringSet("history", s);
         editor.commit();
     }
 
@@ -98,9 +117,11 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCo
      * @param mainActivity Context.
      */
     public void restoreFromSharedPreferences(MainActivity mainActivity) {
-        Log.v("SHAREDSHARED", "GET");
         SharedPreferences sp;
         sp = mainActivity.getPreferences(Context.MODE_PRIVATE);
-        searchHistory = sp.getStringSet("history", null);
+
+        s = sp.getStringSet("history", null);
+        Log.v("LOGLOG",s.toString());
+
     }
 }

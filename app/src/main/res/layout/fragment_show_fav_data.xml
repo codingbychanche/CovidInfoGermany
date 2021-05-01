@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rounded_corner_light_back"
+    android:background="@drawable/fragment_local_data_rounded_corner_light_back"
     tools:context=".ui.statistics.StatisticsFragment">
 
     <ProgressBar
@@ -19,8 +19,10 @@
 
     <TextView
         android:id="@+id/textView"
+        style="@style/DialogBoxTextBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="@string/remark_currentness"
         app:layout_constraintStart_toStartOf="@+id/bundesland"
         app:layout_constraintTop_toBottomOf="@+id/bundesland"></TextView>
@@ -68,10 +70,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:textAlignment="center"
         android:background="@drawable/rounded_corner_dark_back"
         android:hint="CASES"
-        app:layout_constraintBottom_toBottomOf="@+id/last_update"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/town"></TextView>
 
@@ -80,8 +82,7 @@
         style="@style/DialogBoxTextBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:hint="UPDATED"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@+id/textView"></TextView>
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView"></TextView>
 </androidx.constraintlayout.widget.ConstraintLayout>

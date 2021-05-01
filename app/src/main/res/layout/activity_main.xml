@@ -11,8 +11,7 @@
     <FrameLayout
         android:id="@+id/fragment_local_covid_data_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".25"
+        android:layout_height="200dp"
         android:layout_marginTop="3dp"
         android:elevation="2dp"></FrameLayout>
 
@@ -20,8 +19,7 @@
     <FrameLayout
         android:id="@+id/fragment_fav_covid_data_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".25"
+        android:layout_height="150dp"
         android:layout_marginTop="3dp"
         android:elevation="2dp"></FrameLayout>
 
@@ -31,7 +29,7 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.5"
+        android:layout_weight="1"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp"
         app:defaultNavHost="true"

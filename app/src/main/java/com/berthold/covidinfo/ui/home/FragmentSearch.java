@@ -1,6 +1,7 @@
 package com.berthold.covidinfo.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,12 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.berthold.covidinfo.MainActivity;
 import com.berthold.covidinfo.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * View Model for the search fragment
@@ -77,17 +80,6 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
         // Auto complete text view representing the search history
         searchQueryView = (AutoCompleteTextView) view.findViewById(R.id.search_querry);
 
-        // This init's the search history for the first time.
-        //
-        // All successful search query's are saved to the search history list.
-        // This list is saved/ restored to/ from shared preferences when the app
-        // is closed or started. See mainActivity...
-        if (fragmentSearchViewModel.searchHistory != null) {
-            searchSuggestions = fragmentSearchViewModel.searchHistory.toArray(new String[fragmentSearchViewModel.searchHistory.size()]);
-            ArrayAdapter<String> searchHistoryAdapter =
-                    new ArrayAdapter<String>(getActivity(), R.layout.simple_list_row, R.id.suggestion_text, searchSuggestions);
-            searchQueryView.setAdapter(searchHistoryAdapter);
-        }
 
         // UI
         //
@@ -132,13 +124,28 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
                 }
                 waitingForCovidDataView.setVisibility(View.GONE);
                 covidDataAdapter.notifyDataSetChanged();
-                searchSuggestions = fragmentSearchViewModel.updateSearchHistory(covidSearchResultData);
+
+                fragmentSearchViewModel.addToSearchHistory(covidSearchResultData);
+
+            }
+        });
+
+        /**
+         * Gets an update of the search history for this session.
+         *
+         * The search history contains all succesful search results.
+         * It is kept inside this fragments view model and will be saved
+         * to the shared preferences.
+         */
+        fragmentSearchViewModel.refreshSearchHistory().observe(getViewLifecycleOwner(), new Observer<Set<String>>() {
+            @Override
+            public void onChanged(Set<String>updatedSearchHistory) {
+
+                searchSuggestions =updatedSearchHistory.toArray(new String [updatedSearchHistory.size()]);
 
                 ArrayAdapter<String> searchHistoryAdapter =
                         new ArrayAdapter<String>(getActivity(), R.layout.simple_list_row, R.id.suggestion_text, searchSuggestions);
-
                 searchQueryView.setAdapter(searchHistoryAdapter);
-                searchQueryView.setThreshold(2); // Autocomplete starts with the first character entered....
             }
         });
     }
@@ -151,6 +158,6 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
      */
     @Override
     public void listItemClicked(CovidSearchResultData covidSearchResultData) {
-        fragmentFavCovidDataViewModel.getFavLocationCovidData(covidSearchResultData.getName()+" "+ covidSearchResultData.getBez()+" "+ covidSearchResultData.getBundesland());
+        fragmentFavCovidDataViewModel.getFavLocationCovidData(covidSearchResultData.getName() + " " + covidSearchResultData.getBez() + " " + covidSearchResultData.getBundesland());
     }
 }
