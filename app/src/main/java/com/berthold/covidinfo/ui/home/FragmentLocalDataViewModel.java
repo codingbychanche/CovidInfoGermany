@@ -4,10 +4,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 /**
- * This view model handles all search query's
+ *
  */
 public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearchCovidData.getCovidDataInterface{
 
@@ -54,6 +55,19 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
             gd.cancel();
             gd.getCovid();
         }
+    }
+
+    /**
+     * Returns a url that searches the network for covid info
+     * regarding the users favourite location.
+     *
+     * @return
+     */
+    public String getURLForCurrentLocation(){
+
+        String town=covidDataAsJson.getValue().get(0).getName();
+        String url=new String (MessageFormat.format("https://de.search.yahoo.com/yhs/search?hspart=ddc&hsimp=yhs-linuxmint&type=__alt__ddc_linuxmint_com&p={0}+covid+regeln)", town));
+        return url;
     }
 
     /**

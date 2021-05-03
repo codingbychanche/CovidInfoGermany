@@ -2,6 +2,7 @@ package com.berthold.covidinfo.ui.home;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Criteria;
@@ -9,6 +10,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -36,7 +38,6 @@ public class FragmentLocalData extends Fragment implements LocationListener {
     private LocationManager locationManager;
     private String provider;
     private static final int UPDATE_LOCATION_EVERY_MS = 1000 * 60 * 2; // Update location every 2 Min's...
-
 
     // ViewModel
     static FragmentLocalDataViewModel fragmentLocalDataViewModel;
@@ -81,8 +82,6 @@ public class FragmentLocalData extends Fragment implements LocationListener {
         // Get current location
         //
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-
-
         Criteria criteria = new Criteria();
         provider = locationManager.getBestProvider(criteria, false);
 
@@ -108,6 +107,22 @@ public class FragmentLocalData extends Fragment implements LocationListener {
 
         fragmentLocalDataViewModel.getLocationIsUpdating().setValue(true);
 
+        //
+        // When clicked, open webbrowser an try to find local information.
+        //
+        townView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url;
+                String town = townView.getText().toString();
+                if (!town.isEmpty()) {
+                    url = fragmentLocalDataViewModel.getURLForCurrentLocation();
+                    Intent Getintent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(Getintent);
+                }
+            }
+        });
+
         /*
          * Live data receivers.
          *
@@ -129,14 +144,16 @@ public class FragmentLocalData extends Fragment implements LocationListener {
 
                 if (covidSearchResultData != null) {
                     for (CovidSearchResultData r : covidSearchResultData) {
-                        townView.setText(r.getName());
-                        bezView.setText(r.getBez());
-                        bundeslandView.setText(r.getBundesland());
+                        if (!r.getName().isEmpty()) {// Test, if for your current loc no data is found, try the next......
+                            townView.setText(r.getName());
+                            bezView.setText(r.getBez());
+                            bundeslandView.setText(r.getBundesland());
 
-                        casesPer10KView.setText(r.getCasesPer10K() + "");
-                        casesPer10KView.setTextColor(CovidDataCasesColorCoder.getColor((int) r.getCasesPer10K()));
+                            casesPer10KView.setText(r.getCasesPer10K() + "");
+                            casesPer10KView.setTextColor(CovidDataCasesColorCoder.getColor((int) r.getCasesPer10K()));
 
-                        lasUpdateView.setText(r.getLastUpdate());
+                            lasUpdateView.setText(r.getLastUpdate());
+                        }
                     }
                 }
             }

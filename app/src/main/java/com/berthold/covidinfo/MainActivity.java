@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         // Restore each view model's shared preferences...
         fragmentSearchViewModel.restoreFromSharedPreferences(this);
         fragmentFavCovidDataViewModel.restoreFromSharedPreferences(this);
-
     }
 
     /**

@@ -141,11 +141,13 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
             @Override
             public void onChanged(Set<String>updatedSearchHistory) {
 
-                searchSuggestions =updatedSearchHistory.toArray(new String [updatedSearchHistory.size()]);
+                if(updatedSearchHistory!=null) {
+                    searchSuggestions = updatedSearchHistory.toArray(new String[updatedSearchHistory.size()]);
 
-                ArrayAdapter<String> searchHistoryAdapter =
-                        new ArrayAdapter<String>(getActivity(), R.layout.simple_list_row, R.id.suggestion_text, searchSuggestions);
-                searchQueryView.setAdapter(searchHistoryAdapter);
+                    ArrayAdapter<String> searchHistoryAdapter =
+                            new ArrayAdapter<String>(getActivity(), R.layout.simple_list_row, R.id.suggestion_text, searchSuggestions);
+                    searchQueryView.setAdapter(searchHistoryAdapter);
+                }
             }
         });
     }

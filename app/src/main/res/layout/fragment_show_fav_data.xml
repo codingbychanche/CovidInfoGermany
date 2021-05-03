@@ -17,16 +17,6 @@
         app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toTopOf="@+id/imageView2"></ProgressBar>
 
-    <TextView
-        android:id="@+id/textView"
-        style="@style/DialogBoxTextBody"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/remark_currentness"
-        app:layout_constraintStart_toStartOf="@+id/bundesland"
-        app:layout_constraintTop_toBottomOf="@+id/bundesland"></TextView>
-
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
@@ -38,7 +28,7 @@
 
     <TextView
         android:id="@+id/town"
-        style="@style/DialogBoxStyleTitle"
+        style="@style/link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -48,7 +38,7 @@
 
     <TextView
         android:id="@+id/bundesland"
-        style="@style/DialogBoxTextBody"
+        style="@style/TableRowsTextBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="BUNDESLAND"
@@ -57,7 +47,7 @@
 
     <TextView
         android:id="@+id/bez"
-        style="@style/DialogBoxTextBody"
+        style="@style/TableRowsTextBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="REGION"
@@ -83,6 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="UPDATED"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView"></TextView>
+        app:layout_constraintEnd_toEndOf="@+id/cases_per_10K"
+        app:layout_constraintStart_toStartOf="@+id/cases_per_10K"
+        app:layout_constraintTop_toBottomOf="@+id/cases_per_10K"></TextView>
 </androidx.constraintlayout.widget.ConstraintLayout>

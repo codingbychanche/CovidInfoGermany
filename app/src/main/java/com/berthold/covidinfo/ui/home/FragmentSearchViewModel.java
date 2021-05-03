@@ -20,6 +20,7 @@ import java.util.Set;
 public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCovidData.getCovidDataInterface {
 
     public String lastSearchQueryEntered;
+    Set<String> s=new HashSet<>();
 
     /**
      * Covid data search results.
@@ -37,12 +38,10 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCo
     /**
      * The search history
      */
-    private Set<String> s=new HashSet();
     public MutableLiveData<Set<String>> searchHistory;
     public LiveData<Set<String>> refreshSearchHistory() {
         if (searchHistory == null) {
             searchHistory = new MutableLiveData<>();
-            searchHistory.setValue(s);
             return searchHistory;
         }
         return searchHistory;
@@ -104,9 +103,8 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCo
         sp = mainActivity.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
-        Set<String> s = searchHistory.getValue();
-
-        editor.putStringSet("history", s);
+        //Set<String> s = searchHistory.getValue();
+        //editor.putStringSet("history", s);
         editor.commit();
     }
 
@@ -120,8 +118,7 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCo
         SharedPreferences sp;
         sp = mainActivity.getPreferences(Context.MODE_PRIVATE);
 
-        s = sp.getStringSet("history", null);
-        Log.v("LOGLOG",s.toString());
+        //s = sp.getStringSet("history", null);
 
     }
 }

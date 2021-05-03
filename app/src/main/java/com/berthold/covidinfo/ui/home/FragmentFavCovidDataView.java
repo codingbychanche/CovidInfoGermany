@@ -1,5 +1,7 @@
 package com.berthold.covidinfo.ui.home;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ public class FragmentFavCovidDataView extends Fragment {
     // ViewModel
     static FragmentFavCovidDataViewModel fragmentFavCovidDataViewModel;
     static FragmentSearchViewModel fragmentSearchViewModel;
+
 
     // UI
     TextView townView, bezView, bundeslandView, casesPer10KView, lasUpdateView;
@@ -55,6 +58,33 @@ public class FragmentFavCovidDataView extends Fragment {
 
         lasUpdateView = view.findViewById(R.id.last_update);
 
+        //
+        // When clicked, open webbrowser and try to find local information.
+        //
+        townView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url;
+                String town=townView.getText().toString();
+                if (!town.isEmpty()) {
+                    url = fragmentFavCovidDataViewModel.getURLForFavLocation();
+                    Intent Getintent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(Getintent);
+                }
+            }
+        });
+
+
+        /*
+         * Live data receivers.
+         *
+         *
+         *
+         *
+         *
+         *
+         *
+         */
         /**
          * Receive update on fav location
          *

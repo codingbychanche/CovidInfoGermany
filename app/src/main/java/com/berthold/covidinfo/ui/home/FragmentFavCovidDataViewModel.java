@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.berthold.covidinfo.MainActivity;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 /**
@@ -60,6 +61,19 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
 
             isUpdating.setValue(false);
         }
+    }
+
+    /**
+     * Returns a url that searches the network for covid info
+     * regarding the users favourite covid location.
+     *
+     * @return
+     */
+      public String getURLForFavLocation(){
+
+        String town=favCovidDataLocation.getValue().getName();
+        String url=new String (MessageFormat.format("https://de.search.yahoo.com/yhs/search?hspart=ddc&hsimp=yhs-linuxmint&type=__alt__ddc_linuxmint_com&p={0}+covid+regeln)", town));
+        return url;
     }
 
     /**
