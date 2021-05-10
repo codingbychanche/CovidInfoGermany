@@ -5,10 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,12 +18,10 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.berthold.covidinfo.MainActivity;
 import com.berthold.covidinfo.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * View Model for the search fragment
@@ -35,18 +32,19 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
     private FragmentSearchViewModel fragmentSearchViewModel;
     private FragmentFavCovidDataViewModel fragmentFavCovidDataViewModel;
 
-    private ProgressBar waitingForCovidDataView;
-    private ImageButton doSearch, deleteInput;
+    private ProgressBar waitingForCovidDataLoadedFromNetwork;
+    private SearchView searchView;
 
     private RecyclerView covidDataRecyclerView;
     private RecyclerView.LayoutManager covidDataLayoutManager;
     private CovidDataAdapter covidDataAdapter;
     private List<CovidSearchResultData> covidDataList = new ArrayList<>();
 
-    private AutoCompleteTextView searchQueryView;
+    // API
+    private String apiAddressStadtkreise = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=covid-19-germany-landkreise&q={0}&facet=last_update&facet=name&facet=rs&facet=bez&facet=bl";
 
-    // A list of previously, successful search query's
-    String[] searchSuggestions;
+    // Async task responsible for building a list of search suggestions....
+    private AsyncTaskBuildCovidDataSearchSuggestionsList getCovidData = null;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -72,82 +70,67 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
         covidDataRecyclerView.setAdapter(covidDataAdapter);
 
         // UI
-        waitingForCovidDataView = view.findViewById(R.id.progress_waiting_for_data);
-        doSearch = view.findViewById(R.id.do_search);
-        deleteInput = view.findViewById(R.id.clear_search);
-        waitingForCovidDataView.setVisibility(View.GONE);
-
-        // Auto complete text view representing the search history
-        searchQueryView = (AutoCompleteTextView) view.findViewById(R.id.search_querry);
-
+        waitingForCovidDataLoadedFromNetwork = view.findViewById(R.id.progress_waiting_for_data);
+        searchView = view.findViewById(R.id.search);
 
         // UI
         //
-        // Get Covid data from network.
-        doSearch.setOnClickListener(new View.OnClickListener() {
+        // The search view which enables the user to search covid data
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View v) {
-                String sq = searchQueryView.getText().toString();
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String sq) {
+
                 if (!sq.isEmpty()) {
-                    fragmentSearchViewModel.lastSearchQueryEntered = sq;
-                    waitingForCovidDataView.setVisibility(View.VISIBLE);
-                    fragmentSearchViewModel.searchCovidData(sq);
+                    if (getCovidData != null)
+                        getCovidData.cancel(true);
+                    getCovidData = new AsyncTaskBuildCovidDataSearchSuggestionsList(apiAddressStadtkreise, sq, covidDataAdapter, fragmentSearchViewModel);
+                    getCovidData.execute();
+                } else {
+                    if (getCovidData != null)
+                        getCovidData.cancel(true);
+
+                    // Async task is responsible for showing this progressbar.....
+                    fragmentFavCovidDataViewModel.getIsUpdating().postValue(false);
                 }
+                fragmentFavCovidDataViewModel.getIsUpdating().postValue(false);
+                return false;
             }
         });
 
-        deleteInput.setOnClickListener(new View.OnClickListener() {
+        //
+        // Is invoked when the searchViews close button (the 'x') is pressed....
+        //
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
-            public void onClick(View v) {
-                searchQueryView.setText("");
-                covidDataList.clear();
-                covidDataAdapter.notifyDataSetChanged();
+            public boolean onClose() {
+                if (getCovidData != null)
+                    getCovidData.cancel(true);
+                fragmentFavCovidDataViewModel.getIsUpdating().postValue(false);
+                return false;
             }
         });
 
+
+        //
+        //
+        // Life data observers....
+        //
+        //
         /**
-         * Receives result of network query.
-         * Updates the search history.
-         *
-         * Invoked by {@link fragmentSearchViewModel.getCovidData()}
+         * Show progress.
          */
-        fragmentSearchViewModel.updateCovidData().observe(getViewLifecycleOwner(), new Observer<List<CovidSearchResultData>>() {
+        fragmentSearchViewModel.searchListIsUpdating().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
-            public void onChanged(@Nullable List<CovidSearchResultData> covidSearchResultData) {
-
-                covidDataList.clear();
-
-                if (covidSearchResultData != null) {
-                    for (CovidSearchResultData r : covidSearchResultData) {
-                        covidDataList.add(r);
-                    }
-                }
-                waitingForCovidDataView.setVisibility(View.GONE);
-                covidDataAdapter.notifyDataSetChanged();
-
-                fragmentSearchViewModel.addToSearchHistory(covidSearchResultData);
-
-            }
-        });
-
-        /**
-         * Gets an update of the search history for this session.
-         *
-         * The search history contains all succesful search results.
-         * It is kept inside this fragments view model and will be saved
-         * to the shared preferences.
-         */
-        fragmentSearchViewModel.refreshSearchHistory().observe(getViewLifecycleOwner(), new Observer<Set<String>>() {
-            @Override
-            public void onChanged(Set<String>updatedSearchHistory) {
-
-                if(updatedSearchHistory!=null) {
-                    searchSuggestions = updatedSearchHistory.toArray(new String[updatedSearchHistory.size()]);
-
-                    ArrayAdapter<String> searchHistoryAdapter =
-                            new ArrayAdapter<String>(getActivity(), R.layout.simple_list_row, R.id.suggestion_text, searchSuggestions);
-                    searchQueryView.setAdapter(searchHistoryAdapter);
-                }
+            public void onChanged(Boolean isUpdating) {
+                if (isUpdating)
+                    waitingForCovidDataLoadedFromNetwork.setVisibility(View.VISIBLE);
+                else
+                    waitingForCovidDataLoadedFromNetwork.setVisibility(View.GONE);
             }
         });
     }

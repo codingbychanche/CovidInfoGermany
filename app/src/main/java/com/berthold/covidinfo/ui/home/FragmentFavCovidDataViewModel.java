@@ -20,12 +20,14 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
     ThreadGetFavLocCovidData t;
     // progressbar
     private MutableLiveData<Boolean> isUpdating = new MutableLiveData<>();
+
     public MutableLiveData<Boolean> getIsUpdating() {
         return isUpdating;
     }
 
     // Covid data
     public MutableLiveData<CovidSearchResultData> favCovidDataLocation;
+
     public MutableLiveData<CovidSearchResultData> updateFavLocation() {
         if (favCovidDataLocation == null) {
             favCovidDataLocation = new MutableLiveData<>();
@@ -39,7 +41,7 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
     public void getFavLocationCovidData(String searchQuery) {
         String apiAddressStadtkreise = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=covid-19-germany-landkreise&q={0}&facet=last_update&facet=name&facet=rs&facet=bez&facet=bl";
 
-       isUpdating.setValue(true);
+        isUpdating.setValue(true);
 
         ThreadGetFavLocCovidData t = new ThreadGetFavLocCovidData().getInstance(apiAddressStadtkreise, searchQuery, this);
         t.get();
@@ -57,9 +59,8 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
         isUpdating.postValue(false);
         if (covidData != null) {
             CovidSearchResultData r = covidData.get(0);
+            Log.v("THREADTHREAD", covidData.get(0).getName());
             favCovidDataLocation.postValue(r);
-
-            isUpdating.setValue(false);
         }
     }
 
@@ -69,10 +70,10 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
      *
      * @return
      */
-      public String getURLForFavLocation(){
+    public String getURLForFavLocation() {
 
-        String town=favCovidDataLocation.getValue().getName();
-        String url=new String (MessageFormat.format("https://de.search.yahoo.com/yhs/search?hspart=ddc&hsimp=yhs-linuxmint&type=__alt__ddc_linuxmint_com&p={0}+covid+regeln)", town));
+        String town = favCovidDataLocation.getValue().getName();
+        String url = new String(MessageFormat.format("https://de.search.yahoo.com/yhs/search?hspart=ddc&hsimp=yhs-linuxmint&type=__alt__ddc_linuxmint_com&p={0}+covid+regeln)", town));
         return url;
     }
 
@@ -87,8 +88,8 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
         sp = mainActivity.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
-        if (favCovidDataLocation!= null) {
-            editor.putString("favLocation", favCovidDataLocation.getValue().getName()+" "+favCovidDataLocation.getValue().getBez()+" "+favCovidDataLocation.getValue().getBundesland());
+        if (favCovidDataLocation != null) {
+            editor.putString("favLocation", favCovidDataLocation.getValue().getName() + " " + favCovidDataLocation.getValue().getBez() + " " + favCovidDataLocation.getValue().getBundesland());
             editor.apply();
         }
     }

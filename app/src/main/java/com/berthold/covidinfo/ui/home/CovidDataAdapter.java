@@ -88,4 +88,10 @@ public class CovidDataAdapter extends RecyclerView.Adapter<CovidDataAdapter.View
             return covidSearchResultDataList.size();
         return 0;
     }
+
+    public void add(CovidSearchResultData d){
+        covidSearchResultDataList.add(0,d);
+    }
+
+    public void clear(){covidSearchResultDataList.clear();}
 }

@@ -10,14 +10,14 @@ import java.util.List;
 /**
  *
  */
-public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearchCovidData.getCovidDataInterface{
+public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearchLocalCovidData.getCovidDataInterface{
 
     //
     // Live data
     //
     // Progressbar showing updates for the network connection when fetching covid data
     private MutableLiveData<Boolean> networkIsUpdating =new MutableLiveData<>();
-    public MutableLiveData<Boolean> unetworkIsUpdating(){
+    public MutableLiveData<Boolean> networkIsUpdating(){
         return networkIsUpdating;
     }
 
@@ -50,7 +50,7 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
 
         // Starts the database connection, gets the data and invokes the
         // dedicated interface when completed.
-        ThreadSearchCovidData gd = ThreadSearchCovidData.getInstance(this, apiAddressStadtkreise, searchQuery);
+        ThreadSearchLocalCovidData gd = ThreadSearchLocalCovidData.getInstance(this, apiAddressStadtkreise, searchQuery);
         if (gd != null) {
             gd.cancel();
             gd.getCovid();
@@ -66,7 +66,7 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
     public String getURLForCurrentLocation(){
 
         String town=covidDataAsJson.getValue().get(0).getName();
-        String url=new String (MessageFormat.format("https://de.search.yahoo.com/yhs/search?hspart=ddc&hsimp=yhs-linuxmint&type=__alt__ddc_linuxmint_com&p={0}+covid+regeln)", town));
+        String url=(MessageFormat.format("https://de.search.yahoo.com/yhs/search?hspart=ddc&hsimp=yhs-linuxmint&type=__alt__ddc_linuxmint_com&p={0}+covid+regeln)", town));
         return url;
     }
 

@@ -26,13 +26,14 @@ public class DecodeJsonResult {
     public static List<CovidSearchResultData> getResult(String jsonString){
         int numberOfResults=getHits(jsonString);
         List <CovidSearchResultData> result=new ArrayList<>();
-
+        JSONObject json;
 
         for (int n=0;n<=numberOfResults-1;n++){
-            String record=getRecordNr(jsonString,n);
+            //String record=getRecordNr(jsonString,n);
+            //Log.v("JSONJSON",record);
 
             try {
-               JSONObject json = new JSONObject(record);
+                json = new JSONObject(getRecordNr(jsonString,n));
                 String bl = json.getString("bl");
                 String name=json.getString("name");
                 String bez=json.getString("bez");

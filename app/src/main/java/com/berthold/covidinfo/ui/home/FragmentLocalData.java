@@ -85,7 +85,6 @@ public class FragmentLocalData extends Fragment implements LocationListener {
         Criteria criteria = new Criteria();
         provider = locationManager.getBestProvider(criteria, false);
 
-
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -140,20 +139,19 @@ public class FragmentLocalData extends Fragment implements LocationListener {
             @Override
             public void onChanged(@Nullable List<CovidSearchResultData> covidSearchResultData) {
 
-                fragmentLocalDataViewModel.getLocationIsUpdating().setValue(false);
+                fragmentLocalDataViewModel.networkIsUpdating().setValue(false);
 
                 if (covidSearchResultData != null) {
                     for (CovidSearchResultData r : covidSearchResultData) {
-                        if (!r.getName().isEmpty()) {// Test, if for your current loc no data is found, try the next......
-                            townView.setText(r.getName());
-                            bezView.setText(r.getBez());
-                            bundeslandView.setText(r.getBundesland());
+                        townView.setText(r.getName());
+                        bezView.setText(r.getBez());
+                        bundeslandView.setText(r.getBundesland());
 
-                            casesPer10KView.setText(r.getCasesPer10K() + "");
-                            casesPer10KView.setTextColor(CovidDataCasesColorCoder.getColor((int) r.getCasesPer10K()));
+                        casesPer10KView.setText(r.getCasesPer10K() + "");
+                        casesPer10KView.setTextColor(CovidDataCasesColorCoder.getColor((int) r.getCasesPer10K()));
 
-                            lasUpdateView.setText(r.getLastUpdate());
-                        }
+                        lasUpdateView.setText(r.getLastUpdate());
+
                     }
                 }
             }
@@ -162,7 +160,7 @@ public class FragmentLocalData extends Fragment implements LocationListener {
         //
         // Receives status update when covid date is fetched from the network
         //
-        fragmentLocalDataViewModel.unetworkIsUpdating().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        fragmentLocalDataViewModel.networkIsUpdating().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isUpdating) {
                 if (isUpdating)

@@ -10,16 +10,16 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThreadSearchCovidData {
+public class ThreadSearchLocalCovidData {
 
     private static int numberOfThreads = 0;
     private static boolean isCancheled;
 
-    private static ThreadSearchCovidData getCovidData;
+    private static ThreadSearchLocalCovidData getCovidData;
     private static String apiAddressStadtkreise, searchQuery;
     private static getCovidDataInterface gC;
 
-    public ThreadSearchCovidData() {
+    public ThreadSearchLocalCovidData() {
     }
 
     /**
@@ -33,18 +33,18 @@ public class ThreadSearchCovidData {
      * @param sQ The search query.
      * @return An instance of this class or null.
      */
-    public static ThreadSearchCovidData getInstance(getCovidDataInterface g, String sK, String sQ) {
+    public static ThreadSearchLocalCovidData getInstance(getCovidDataInterface g, String sK, String sQ) {
         if (numberOfThreads == 0 && !sQ.isEmpty()) {
             isCancheled = false;
             gC = g;
             apiAddressStadtkreise = sK;
             searchQuery = sQ;
             numberOfThreads++;
-            getCovidData = new ThreadSearchCovidData();
+            getCovidData = new ThreadSearchLocalCovidData();
             return getCovidData;
         }
         Log.v("CANCELCANCEL", "No Thread");
-        gC.receive(null);
+        //gC.receive(null);
         return null;
     }
 
@@ -62,6 +62,8 @@ public class ThreadSearchCovidData {
             @Override
             public void run() {
                 StringBuffer covidDataBuffer = new StringBuffer();
+
+
 
                 // Get Covid data from the server...
                 try {
@@ -82,7 +84,7 @@ public class ThreadSearchCovidData {
                             numberOfThreads = 0;
                             break;
                         }
-                        Thread.sleep(50);
+                        Thread.sleep(5);
                     }
                     isr.close();
                 } catch (Exception e) {

@@ -7,7 +7,6 @@
     android:background="@drawable/fragment_local_data_rounded_corner_light_back"
     tools:context=".ui.home.FragmentSearch">
 
-    <!--
     <SearchView
         android:id="@+id/search"
         android:layout_width="match_parent"
@@ -15,8 +14,8 @@
         app:iconifiedByDefault="false"
         app:layout_constraintTop_toTopOf="parent"
         app:queryHint="@string/hint_auto_complete" />
-       -->
 
+<!--
     <AutoCompleteTextView
         android:id="@+id/search_querry"
         android:dropDownHeight="100dp"
@@ -38,16 +37,18 @@
         android:src="@android:drawable/ic_search_category_default"
         app:layout_constraintEnd_toStartOf="@+id/clear_search"
         tools:layout_editor_absoluteY="13dp"></ImageButton>
+        -->
 
     <ProgressBar
         android:id="@+id/progress_waiting_for_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></ProgressBar>
-
+<!--
     <ImageButton
         android:id="@+id/clear_search"
         android:layout_width="wrap_content"
@@ -57,6 +58,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/do_search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/do_search"></ImageButton>
+        -->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/covid_data"
@@ -68,5 +70,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_querry"></androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintTop_toBottomOf="@+id/search"></androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.widget.ConstraintLayout>

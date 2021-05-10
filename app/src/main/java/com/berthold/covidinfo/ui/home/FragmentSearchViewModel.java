@@ -17,10 +17,13 @@ import java.util.Set;
 /**
  * This view model handles all search query's
  */
-public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCovidData.getCovidDataInterface {
+public class FragmentSearchViewModel extends ViewModel {
 
-    public String lastSearchQueryEntered;
-    Set<String> s=new HashSet<>();
+    // progressbar
+    private MutableLiveData<Boolean> isUpdating = new MutableLiveData<>();
+    public MutableLiveData<Boolean> searchListIsUpdating() {
+        return isUpdating;
+    }
 
     /**
      * Covid data search results.
@@ -28,7 +31,6 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCo
      * @return A list of {@link CovidSearchResultData} containing the search results.
      */
     public MutableLiveData<List<CovidSearchResultData>> covidDataAsJson;
-
     public LiveData<List<CovidSearchResultData>> updateCovidData() {
         if (covidDataAsJson == null)
             covidDataAsJson = new MutableLiveData<>();
@@ -39,56 +41,13 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCo
      * The search history
      */
     public MutableLiveData<Set<String>> searchHistory;
+
     public LiveData<Set<String>> refreshSearchHistory() {
         if (searchHistory == null) {
             searchHistory = new MutableLiveData<>();
             return searchHistory;
         }
         return searchHistory;
-    }
-
-    /**
-     * Gets the data via the api from the network.
-     */
-    public void searchCovidData(String searchQuery) {
-        String apiAddressStadtkreise = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=covid-19-germany-landkreise&q={0}&facet=last_update&facet=name&facet=rs&facet=bez&facet=bl";
-
-        // Starts the database connection, gets the data and invokes the
-        // dedicated interface when completed.
-        ThreadSearchCovidData gd = ThreadSearchCovidData.getInstance(this, apiAddressStadtkreise, searchQuery);
-        if (gd != null) {
-            gd.cancel();
-            gd.getCovid();
-        }
-    }
-
-    /**
-     * Receives the data from the network connection and
-     * updates the UI via the observer....
-     *
-     * @param covidData
-     */
-    @Override
-    public void receive(List<CovidSearchResultData> covidData) {
-        covidDataAsJson.postValue(covidData);
-    }
-
-    /**
-     * This updates a list of previous successful search query's.
-     * Invoked each time a successful search took place.
-     *
-     * @param covidSearchResultData Search result.
-     * @return Updated search history.
-     */
-    public void addToSearchHistory(List<CovidSearchResultData> covidSearchResultData) {
-
-        if (covidSearchResultData.size() > 0) {
-
-            for (CovidSearchResultData r : covidSearchResultData) {
-                s.add(r.getName() + ", " + r.getBez() + ", " + r.getBundesland());
-            }
-            searchHistory.postValue(s);
-        }
     }
 
     /**
@@ -103,8 +62,8 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCo
         sp = mainActivity.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
-        //Set<String> s = searchHistory.getValue();
-        //editor.putStringSet("history", s);
+        Set<String> s = searchHistory.getValue();
+        editor.putStringSet("history", s);
         editor.commit();
     }
 
@@ -117,8 +76,7 @@ public class FragmentSearchViewModel extends ViewModel implements ThreadSearchCo
     public void restoreFromSharedPreferences(MainActivity mainActivity) {
         SharedPreferences sp;
         sp = mainActivity.getPreferences(Context.MODE_PRIVATE);
-
-        //s = sp.getStringSet("history", null);
-
+        searchHistory=new MutableLiveData<Set<String>>();
+        searchHistory.setValue(sp.getStringSet("history", searchHistory.getValue()));
     }
 }
