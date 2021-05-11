@@ -1,13 +1,12 @@
 package com.berthold.covidinfo.ui.home;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +33,7 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
 
     private ProgressBar waitingForCovidDataLoadedFromNetwork;
     private SearchView searchView;
+    private TextView waitingForCovidDataLoadedFromNetworkUpdateInfo;
 
     private RecyclerView covidDataRecyclerView;
     private RecyclerView.LayoutManager covidDataLayoutManager;
@@ -71,6 +71,7 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
 
         // UI
         waitingForCovidDataLoadedFromNetwork = view.findViewById(R.id.progress_waiting_for_data);
+        waitingForCovidDataLoadedFromNetworkUpdateInfo=view.findViewById(R.id.search_update_info);
         searchView = view.findViewById(R.id.search);
 
         // UI
@@ -95,9 +96,9 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
                         getCovidData.cancel(true);
 
                     // Async task is responsible for showing this progressbar.....
-                    fragmentFavCovidDataViewModel.getIsUpdating().postValue(false);
+                   fragmentSearchViewModel.searchListIsUpdating().postValue(false);
+                   fragmentSearchViewModel.getUpdateInfo().postValue("");
                 }
-                fragmentFavCovidDataViewModel.getIsUpdating().postValue(false);
                 return false;
             }
         });
@@ -110,7 +111,7 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
             public boolean onClose() {
                 if (getCovidData != null)
                     getCovidData.cancel(true);
-                fragmentFavCovidDataViewModel.getIsUpdating().postValue(false);
+               fragmentSearchViewModel.searchListIsUpdating().postValue(false);
                 return false;
             }
         });
@@ -131,6 +132,16 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
                     waitingForCovidDataLoadedFromNetwork.setVisibility(View.VISIBLE);
                 else
                     waitingForCovidDataLoadedFromNetwork.setVisibility(View.GONE);
+            }
+        });
+
+        /**
+         * Show update info...
+         */
+        fragmentSearchViewModel.getUpdateInfo().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                waitingForCovidDataLoadedFromNetworkUpdateInfo.setText(s);
             }
         });
     }

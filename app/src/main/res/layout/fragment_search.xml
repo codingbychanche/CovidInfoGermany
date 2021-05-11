@@ -39,15 +39,9 @@
         tools:layout_editor_absoluteY="13dp"></ImageButton>
         -->
 
-    <ProgressBar
-        android:id="@+id/progress_waiting_for_data"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></ProgressBar>
+
+
+
 <!--
     <ImageButton
         android:id="@+id/clear_search"
@@ -71,4 +65,21 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search"></androidx.recyclerview.widget.RecyclerView>
+    <ProgressBar
+        android:id="@+id/progress_waiting_for_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search"></ProgressBar>
+    <TextView
+        android:id="@+id/search_update_info"
+        style="@style/DialogBoxTextBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/progress_waiting_for_data"
+        app:layout_constraintStart_toStartOf="@+id/progress_waiting_for_data"
+        app:layout_constraintTop_toBottomOf="@+id/progress_waiting_for_data"></TextView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

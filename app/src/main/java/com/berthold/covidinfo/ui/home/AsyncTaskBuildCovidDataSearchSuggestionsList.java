@@ -7,6 +7,10 @@ import android.widget.ProgressBar;
 
 import androidx.lifecycle.ViewModel;
 
+import com.berthold.covidinfo.ui.home.CovidDataAdapter;
+import com.berthold.covidinfo.ui.home.CovidSearchResultData;
+import com.berthold.covidinfo.ui.home.FragmentSearchViewModel;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,7 +43,7 @@ public class AsyncTaskBuildCovidDataSearchSuggestionsList extends AsyncTask<Stri
     private CovidDataAdapter covidDataAdapter;
     private FragmentSearchViewModel waitingForCovidDataLoadedFromNetowrk;
 
-    AsyncTaskBuildCovidDataSearchSuggestionsList(String url, String searchQuery, CovidDataAdapter covidDataAdapter, FragmentSearchViewModel waitingForCovidDataLoadedFromNetwork) {
+    public AsyncTaskBuildCovidDataSearchSuggestionsList(String url, String searchQuery, CovidDataAdapter covidDataAdapter, FragmentSearchViewModel waitingForCovidDataLoadedFromNetwork) {
         this.url = url;
         this.searchQuery = searchQuery;
         this.covidDataAdapter = covidDataAdapter;
@@ -66,9 +70,10 @@ public class AsyncTaskBuildCovidDataSearchSuggestionsList extends AsyncTask<Stri
         String jsonResultOfCovidData = null;
         CovidSearchResultData decodedResult = new CovidSearchResultData("-", "-", "-", 0, "");
 
-        Log.v("ASYNCASYNC", "doInBackground l=" + params.length);
+        waitingForCovidDataLoadedFromNetowrk.getUpdateInfo().postValue ("Network......");
 
         // Get Covid data from the server...
+
         try {
 
             // Reads the data from the network connection
@@ -83,32 +88,37 @@ public class AsyncTaskBuildCovidDataSearchSuggestionsList extends AsyncTask<Stri
 
             isr.close();
 
-            // Network search is done.....
-            waitingForCovidDataLoadedFromNetowrk.searchListIsUpdating().postValue(false);
-
 
         } catch (Exception e) {
             Log.v("ASYNC_ERRORERROR", e + "");
         }
 
+        //
+        //
         // Decode the obtained data
         // This is the time consuming part....
-        int numberOfResults = getHits(jsonResultOfCovidData);
+        //
+        //
         List<CovidSearchResultData> result = new ArrayList<>();
-        JSONObject json;
 
-        for (int n = 0; n <= numberOfResults - 1; n++) {
+        try {
 
-            // This is important!
-            // If you miss to do this here, the class which created
-            // this object has no way to end the async task started!
-            // => This means, no matter how often you call task.cancel(true)
-            // the async task will not stop! You have to take
-            // care here to react and run the code that cancels!
-            if (isCancelled())
-                break;
+            JSONObject json = new JSONObject(jsonResultOfCovidData);
+            int hits = json.getInt("nhits");
 
-            try {
+
+            for (int n = 0; n <= hits - 1; n++) {
+
+                // This is important!
+                // If you miss to do this here, the class which created
+                // this object has no way to end the async task started!
+                // => This means, no matter how often you call task.cancel(true)
+                // the async task will not stop! You have to take
+                // care here to react and run the code that cancels!
+                if (isCancelled())
+                    break;
+
+
                 json = new JSONObject(getRecordNr(jsonResultOfCovidData, n));
                 String bl = json.getString("bl");
                 String name = json.getString("name");
@@ -121,11 +131,20 @@ public class AsyncTaskBuildCovidDataSearchSuggestionsList extends AsyncTask<Stri
                 CovidSearchResultData d = new CovidSearchResultData(bl, name, bez, casesPer100K, lastUpdateFormated);
                 result.add(d);
 
+                waitingForCovidDataLoadedFromNetowrk.getUpdateInfo().postValue ("Rufe ab:"+n+" / "+hits);
+
+
                 publishProgress(d);
 
-            } catch (JSONException e) {
-                Log.v("JSONJSON", e.toString());
+
             }
+
+
+            // Network search is done.....
+            waitingForCovidDataLoadedFromNetowrk.searchListIsUpdating().postValue(false);
+
+        } catch (JSONException e) {
+            Log.v("JSONJSON", e.toString());
         }
 
         //
@@ -145,7 +164,7 @@ public class AsyncTaskBuildCovidDataSearchSuggestionsList extends AsyncTask<Stri
     protected void onProgressUpdate(CovidSearchResultData... e) {
         super.onProgressUpdate();
 
-        // When we reach this, data has already been opteined from the network,
+        // When we reach this, data has already been optained from the network,
         // so we hide the progressbar and show the update status from now
         // on..
         // toDo: Display a dedicated progressbar showing percentage of data decoded...
@@ -168,6 +187,7 @@ public class AsyncTaskBuildCovidDataSearchSuggestionsList extends AsyncTask<Stri
         if (result != null)
             // waitingForCovidDataLoadedFromNetowrk.setVisibility(View.GONE);
             waitingForCovidDataLoadedFromNetowrk.searchListIsUpdating().postValue(false);
-        Log.v("ASYNCASYNC", "POST:" + result);
+
+        waitingForCovidDataLoadedFromNetowrk.getUpdateInfo().postValue ("");
     }
 }

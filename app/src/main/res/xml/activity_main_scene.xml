@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+       <KeyFrameSet>
+       </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:layout_height="150dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:id="@+id/fragment_local_covid_data_view" />
+        <Constraint
+            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            motion:layout_constraintBottom_toTopOf="@+id/nav_view"
+            motion:layout_constraintTop_toBottomOf="@+id/fragment_fav_covid_data_view"
+            motion:layout_constraintHorizontal_bias="1.0"
+            motion:layout_constraintLeft_toLeftOf="parent"
+            motion:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/nav_host_fragment" />
+        <Constraint
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintLeft_toLeftOf="parent"
+            motion:layout_constraintRight_toRightOf="parent"
+            android:layout_width="match_parent"
+            android:id="@+id/nav_view" />
+        <Constraint
+            android:layout_height="100dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            motion:layout_constraintTop_toBottomOf="@+id/fragment_local_covid_data_view"
+            android:id="@+id/fragment_fav_covid_data_view" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+
+        <Constraint
+            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            motion:layout_constraintBottom_toTopOf="@+id/nav_view"
+            motion:layout_constraintHorizontal_bias="1.0"
+            motion:layout_constraintLeft_toLeftOf="parent"
+            motion:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/nav_host_fragment"
+            motion:layout_constraintTop_toBottomOf="@+id/fragment_fav_covid_data_view" />
+        <Constraint
+            android:layout_height="150dp"
+            android:alpha="0"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_width="match_parent"
+            android:id="@+id/fragment_local_covid_data_view"
+            motion:layout_editor_absoluteY="5dp" />
+
+        <Constraint
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintLeft_toLeftOf="parent"
+            motion:layout_constraintRight_toRightOf="parent"
+            android:layout_width="match_parent"
+            android:id="@+id/nav_view" />
+        <Constraint
+            android:layout_height="100dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:id="@+id/fragment_fav_covid_data_view"
+            motion:layout_constraintTop_toTopOf="@+id/fragment_local_covid_data_view" />
+    </ConstraintSet>
+
+    <Transition
+        motion:constraintSetEnd="@+id/start"
+        motion:constraintSetStart="@+id/end">
+        <OnSwipe
+            motion:dragDirection="dragUp"
+            motion:duration="10000"
+            motion:touchAnchorSide="bottom"
+            />
+    </Transition>
+</MotionScene>

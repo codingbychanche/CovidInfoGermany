@@ -25,6 +25,12 @@ public class FragmentSearchViewModel extends ViewModel {
         return isUpdating;
     }
 
+    // Update info below the progressbar
+    private MutableLiveData<String> updateInfo=new MutableLiveData<>();
+    public MutableLiveData<String> getUpdateInfo(){
+        return updateInfo;
+    }
+
     /**
      * Covid data search results.
      *

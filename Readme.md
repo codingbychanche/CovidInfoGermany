@@ -8,5 +8,13 @@ The app uses an api provided by [Open Data Soft, Covid 19 Pandemic- Germany- Dat
 
 ![](Shot_3.png)
 
+Local covid data is shown permanently. A favourite location can be added from the search results.
+
+![](Shot_2.png)
+
+Size of the search view can be adjusted on smaller screens...
+
+![](Shot_1.png)
+
 
 
