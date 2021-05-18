@@ -41,7 +41,7 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
     private List<CovidSearchResultData> covidDataList = new ArrayList<>();
 
     // API
-    private String apiAddressStadtkreise = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=covid-19-germany-landkreise&q={0}&facet=last_update&facet=name&facet=rs&facet=bez&facet=bl";
+    private String apiAddressStadtkreise = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=covid-19-germany-landkreise&q={0}&facet=last_update&facet=name&facet=rs&facet=bez&facet=bl&rows=100";
 
     // Async task responsible for building a list of search suggestions....
     private AsyncTaskBuildCovidDataSearchSuggestionsList getCovidData = null;
@@ -71,7 +71,7 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
 
         // UI
         waitingForCovidDataLoadedFromNetwork = view.findViewById(R.id.progress_waiting_for_data);
-        waitingForCovidDataLoadedFromNetworkUpdateInfo=view.findViewById(R.id.search_update_info);
+        waitingForCovidDataLoadedFromNetworkUpdateInfo = view.findViewById(R.id.search_update_info);
         searchView = view.findViewById(R.id.search);
 
         // UI
@@ -96,8 +96,8 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
                         getCovidData.cancel(true);
 
                     // Async task is responsible for showing this progressbar.....
-                   fragmentSearchViewModel.searchListIsUpdating().postValue(false);
-                   fragmentSearchViewModel.getUpdateInfo().postValue("");
+                    fragmentSearchViewModel.searchListIsUpdating().postValue(false);
+                    fragmentSearchViewModel.getUpdateInfo().postValue("");
                 }
                 return false;
             }
@@ -111,7 +111,7 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
             public boolean onClose() {
                 if (getCovidData != null)
                     getCovidData.cancel(true);
-               fragmentSearchViewModel.searchListIsUpdating().postValue(false);
+                fragmentSearchViewModel.searchListIsUpdating().postValue(false);
                 return false;
             }
         });
@@ -130,8 +130,10 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
             public void onChanged(Boolean isUpdating) {
                 if (isUpdating)
                     waitingForCovidDataLoadedFromNetwork.setVisibility(View.VISIBLE);
-                else
+                else {
                     waitingForCovidDataLoadedFromNetwork.setVisibility(View.GONE);
+                    waitingForCovidDataLoadedFromNetworkUpdateInfo.setText(" ");
+                }
             }
         });
 

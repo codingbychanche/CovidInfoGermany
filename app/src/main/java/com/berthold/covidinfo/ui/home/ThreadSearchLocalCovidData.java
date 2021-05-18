@@ -63,8 +63,6 @@ public class ThreadSearchLocalCovidData {
             public void run() {
                 StringBuffer covidDataBuffer = new StringBuffer();
 
-
-
                 // Get Covid data from the server...
                 try {
                     URL _url = new URL(MessageFormat.format(apiAddressStadtkreise, searchQuery));

@@ -28,7 +28,7 @@ import static com.berthold.covidinfo.ui.home.DecodeJsonResult.getHits;
 import static com.berthold.covidinfo.ui.home.DecodeJsonResult.getRecordNr;
 
 /**
- * Searches the network for covid data and build a list wirh suggested results.......
+ * Searches the network for covid data and builds a list with the suggested results.......
  */
 // First parameter is what you pass when invoking the execute- command from inside
 // the class using this task. It contains as many parameters of the type specified here.

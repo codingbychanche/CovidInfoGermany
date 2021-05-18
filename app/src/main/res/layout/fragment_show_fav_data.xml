@@ -33,6 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:hint="TOWN"
+        app:layout_constraintRight_toLeftOf="@+id/cases_per_10K"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toTopOf="parent"></TextView>
 
@@ -64,7 +65,7 @@
         android:background="@drawable/rounded_corner_dark_back"
         android:hint="CASES"
         android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/bez"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/town"></TextView>
 
