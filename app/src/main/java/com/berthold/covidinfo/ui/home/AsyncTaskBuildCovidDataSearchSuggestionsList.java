@@ -68,7 +68,7 @@ public class AsyncTaskBuildCovidDataSearchSuggestionsList extends AsyncTask<Stri
     // result of the long running task which is executed in background.
     protected CovidSearchResultData doInBackground(String... params) {
         String jsonResultOfCovidData = null;
-        CovidSearchResultData decodedResult = new CovidSearchResultData("-", "-", "-", 0, "");
+        CovidSearchResultData decodedResult = new CovidSearchResultData("-", "-", "-", "", 0,"");
 
         waitingForCovidDataLoadedFromNetowrk.getUpdateInfo().postValue ("Network......");
 
@@ -120,6 +120,7 @@ public class AsyncTaskBuildCovidDataSearchSuggestionsList extends AsyncTask<Stri
 
 
                 json = new JSONObject(getRecordNr(jsonResultOfCovidData, n));
+                //String recordID=json.getString("recordid");
                 String bl = json.getString("bl");
                 String name = json.getString("name");
                 String bez = json.getString("bez");
@@ -128,15 +129,11 @@ public class AsyncTaskBuildCovidDataSearchSuggestionsList extends AsyncTask<Stri
                 String lastUpdate = json.getString("last_update");
                 String lastUpdateFormated = FormatTimeStamp.german(lastUpdate, true);
 
-                CovidSearchResultData d = new CovidSearchResultData(bl, name, bez, casesPer100K, lastUpdateFormated);
+                CovidSearchResultData d = new CovidSearchResultData("",bl, name, bez, casesPer100K, lastUpdateFormated);
                 result.add(d);
 
                 waitingForCovidDataLoadedFromNetowrk.getUpdateInfo().postValue ("Rufe ab:"+n+" / "+hits);
-
-
                 publishProgress(d);
-
-
             }
 
 

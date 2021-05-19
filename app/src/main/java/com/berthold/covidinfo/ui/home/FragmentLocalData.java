@@ -51,7 +51,7 @@ public class FragmentLocalData extends Fragment implements LocationListener {
     static FragmentLocalDataViewModel fragmentLocalDataViewModel;
 
     // UI
-    TextView townView, bezView, bundeslandView, casesPer10KView, lasUpdateView, localAddressView;
+    TextView townView, bezView, bundeslandView, casesPer10KView, lasUpdateView, localAddressView,localStatisticsView;
     ProgressBar networkIsUpdating, locationIsUpdating;
 
     public FragmentLocalData() {
@@ -85,6 +85,7 @@ public class FragmentLocalData extends Fragment implements LocationListener {
         casesPer10KView = view.findViewById(R.id.cases_per_10K);
         lasUpdateView = view.findViewById(R.id.last_update);
         localAddressView = view.findViewById(R.id.current_address);
+        localStatisticsView=view.findViewById(R.id.statistics);
 
         //
         // When clicked, open web browser an try to find local information.
@@ -187,6 +188,21 @@ public class FragmentLocalData extends Fragment implements LocationListener {
                 localAddressView.setText(s);
             }
         });
+
+        //
+        // Receives statistics for the current location
+        //
+        fragmentLocalDataViewModel.getStatisticsData().observe(getViewLifecycleOwner(), new Observer<List<CovidSearchResultData>>() {
+            @Override
+            public void onChanged(List<CovidSearchResultData> s) {
+                String result;
+                for (CovidSearchResultData d:s) {
+                    result = d.getCasesPer10K() + "//" + d.getLastUpdate();
+                    localStatisticsView.setText(result);
+                }
+
+            }
+        });
     }
 
     /**
@@ -251,7 +267,7 @@ public class FragmentLocalData extends Fragment implements LocationListener {
         }
     }
 
-    /*
+    /**
      * Geocoder updates.
      */
     @Override

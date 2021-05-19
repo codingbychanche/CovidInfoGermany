@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fragment_local_data_rounded_corner_light_back"
+    app:layoutDescription="@xml/fragment_show_local_data_scene"
     tools:context=".ui.statistics.StatisticsFragment">
 
     <ProgressBar
@@ -44,6 +45,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/bundesland"></TextView>
+
+    <TextView
+        android:id="@+id/statistics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@android:drawable/ic_menu_recent_history"
+        android:hint="STATS"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/current_address"></TextView>
 
     <TextView
         android:id="@+id/town"
@@ -97,4 +107,4 @@
         app:layout_constraintStart_toStartOf="@+id/cases_per_10K"
         app:layout_constraintTop_toBottomOf="@+id/cases_per_10K"></TextView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

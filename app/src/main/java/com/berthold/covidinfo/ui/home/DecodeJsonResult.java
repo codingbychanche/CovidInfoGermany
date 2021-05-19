@@ -34,15 +34,19 @@ public class DecodeJsonResult {
 
             try {
                 json = new JSONObject(getRecordNr(jsonString,n));
+                //String recordID=json.getString("datasetid");
                 String bl = json.getString("bl");
                 String name=json.getString("name");
                 String bez=json.getString("bez");
                 int casesPer100K=json.getInt("cases7_per_100k");
 
                 String lastUpdate=json.getString("last_update");
-                String lastUpdateFormated=FormatTimeStamp.german(lastUpdate,true);
+                String lastUpdateFormated=FormatTimeStamp.german(lastUpdate,false);
 
-                CovidSearchResultData d=new CovidSearchResultData(bl,name,bez,casesPer100K,lastUpdateFormated);
+                CovidSearchResultData d=new CovidSearchResultData("-",bl,name,bez,casesPer100K,lastUpdateFormated);
+
+                //Log.v("RECORDID",recordID+"--");
+
                 result.add(d);
 
             }catch(JSONException e){

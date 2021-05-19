@@ -12,9 +12,10 @@ Local covid data is shown permanently. A favourite location can be added from th
 
 ![](Shot_2.png)
 
-Size of the search view can be adjusted on smaller screens...
+Data collected over the last few days can be displayed inside the local view.
 
 ![](Shot_1.png)
 
+Size of the search view can be adjusted on smaller screens...
 
 

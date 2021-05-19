@@ -7,8 +7,10 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.berthold.covidinfo.CovidDataBase;
 import com.berthold.covidinfo.MainActivity;
 
+import java.sql.Connection;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -61,6 +63,22 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
             CovidSearchResultData r = covidData.get(0);
             Log.v("THREADTHREAD", covidData.get(0).getName());
             favCovidDataLocation.postValue(r);
+        }
+
+        Connection covidDataBase=MainActivity.covidDataBase;
+        boolean beenHere=false;
+
+        String name = covidData.get(0).getName();
+        String bundesland = covidData.get(0).getBundesland();
+        String bez = covidData.get(0).getBez();
+        String date = covidData.get(0).getLastUpdate();
+        float cases100K = (float)covidData.get(0).getCasesPer10K();
+
+        if (CovidDataBase.covidDataForThisDateExists(name, bundesland, bez, date, covidDataBase))
+            Log.v("DBMAKE", " Exists");
+        else {
+            CovidDataBase.insert(name,bundesland,bez,cases100K,date,beenHere,covidDataBase);
+            Log.v("DBMAKE","Entry:"+name+" for:"+date+" inserted....");
         }
     }
 

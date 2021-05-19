@@ -83,7 +83,7 @@
         motion:constraintSetEnd="@+id/start"
         motion:constraintSetStart="@+id/end">
         <OnSwipe
-            motion:dragDirection="dragUp"
+            motion:dragDirection="dragDown"
             motion:duration="10000"
             motion:touchAnchorSide="bottom"
             />
