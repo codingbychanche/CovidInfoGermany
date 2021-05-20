@@ -5,7 +5,10 @@ public class CovidSearchResultData {
     private String recordID, bundesland, name, bez;
     private double casesPer1K;
     private String lastUpdate;
+
+    private boolean beenHere;
     private int casesPer1KColorCode;
+
 
     public CovidSearchResultData(String datasetID, String bundesland, String name, String bez, double casesPer1K, String lastUpdate) {
         this.recordID = datasetID;
@@ -72,6 +75,14 @@ public class CovidSearchResultData {
 
     public void setRecordID(String recordID) {
         this.recordID = recordID;
+    }
+
+    public boolean beenHere() {
+        return beenHere;
+    }
+
+    public void setBeenHere(boolean beenHere) {
+        this.beenHere = beenHere;
     }
 }
 

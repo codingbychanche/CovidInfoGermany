@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.berthold.covidinfo.R;
 
+import java.util.List;
+
 
 public class FragmentFavCovidDataView extends Fragment {
 
@@ -26,7 +28,7 @@ public class FragmentFavCovidDataView extends Fragment {
 
 
     // UI
-    TextView townView, bezView, bundeslandView, casesPer10KView, lasUpdateView;
+    TextView townView, bezView, bundeslandView, casesPer10KView, lasUpdateView, localStatisticsView;
     ProgressBar updatingView;
 
     public FragmentFavCovidDataView() {
@@ -47,16 +49,19 @@ public class FragmentFavCovidDataView extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // View models
         fragmentFavCovidDataViewModel = ViewModelProviders.of(requireActivity()).get(FragmentFavCovidDataViewModel.class);
         fragmentSearchViewModel = ViewModelProviders.of(requireActivity()).get(FragmentSearchViewModel.class);
 
-        updatingView=view.findViewById(R.id.fav_loction_is_updating);
+        // UI
+        updatingView = view.findViewById(R.id.fav_loction_is_updating);
         townView = view.findViewById(R.id.town);
         bezView = view.findViewById(R.id.bez);
         bundeslandView = view.findViewById(R.id.bundesland);
         casesPer10KView = view.findViewById(R.id.cases_per_10K);
-
         lasUpdateView = view.findViewById(R.id.last_update);
+        localStatisticsView = view.findViewById(R.id.statistics);
 
         //
         // When clicked, open webbrowser and try to find local information.
@@ -65,7 +70,7 @@ public class FragmentFavCovidDataView extends Fragment {
             @Override
             public void onClick(View v) {
                 String url;
-                String town=townView.getText().toString();
+                String town = townView.getText().toString();
                 if (!town.isEmpty()) {
                     url = fragmentFavCovidDataViewModel.getURLForFavLocation();
                     Intent Getintent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -99,11 +104,22 @@ public class FragmentFavCovidDataView extends Fragment {
                 bundeslandView.setText(r.getBundesland());
 
                 casesPer10KView.setText(r.getCasesPer10K() + "");
-                casesPer10KView.setTextColor(CovidDataCasesColorCoder.getColor((int)r.getCasesPer10K()));
+                casesPer10KView.setTextColor(CovidDataCasesColorCoder.getColor((int) r.getCasesPer10K()));
 
                 lasUpdateView.setText(r.getLastUpdate());
             }
         });
+
+        //
+        // Receives statistics (older data saved inside the database) for the current location
+        //
+        fragmentFavCovidDataViewModel.getStatisticsData().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String result) {
+                localStatisticsView.setText(result);
+            }
+        });
+
 
         /**
          * Show progress.
@@ -111,7 +127,7 @@ public class FragmentFavCovidDataView extends Fragment {
         fragmentFavCovidDataViewModel.getIsUpdating().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isUpdating) {
-                if(isUpdating)
+                if (isUpdating)
                     updatingView.setVisibility(View.VISIBLE);
                 else
                     updatingView.setVisibility(View.GONE);

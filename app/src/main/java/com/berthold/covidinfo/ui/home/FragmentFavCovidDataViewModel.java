@@ -12,6 +12,7 @@ import com.berthold.covidinfo.MainActivity;
 
 import java.sql.Connection;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,6 +38,13 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
         return favCovidDataLocation;
     }
 
+    // Statistics
+    private MutableLiveData<String> statisticsData = new MutableLiveData<>();
+
+    public MutableLiveData<String> getStatisticsData() {
+        return statisticsData;
+    }
+
     /**
      * Gets the data via the api from the network.
      */
@@ -52,6 +60,8 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
 
     /**
      * Receives the covid data from the network
+     * <p>
+     * todo DRY! (see FragmentLocalViewModel)
      *
      * @param covidData
      */
@@ -65,21 +75,39 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
             favCovidDataLocation.postValue(r);
         }
 
-        Connection covidDataBase=MainActivity.covidDataBase;
-        boolean beenHere=false;
+        Connection covidDataBase = MainActivity.covidDataBase;
+        boolean beenHere = false;
 
         String name = covidData.get(0).getName();
         String bundesland = covidData.get(0).getBundesland();
         String bez = covidData.get(0).getBez();
         String date = covidData.get(0).getLastUpdate();
-        float cases100K = (float)covidData.get(0).getCasesPer10K();
+        float cases100K = (float) covidData.get(0).getCasesPer10K();
 
+        // Data base entries are only created when date last updated does not exist
+        // for any entry matching name, bundesland and bez....
         if (CovidDataBase.covidDataForThisDateExists(name, bundesland, bez, date, covidDataBase))
             Log.v("DBMAKE", " Exists");
         else {
-            CovidDataBase.insert(name,bundesland,bez,cases100K,date,beenHere,covidDataBase);
-            Log.v("DBMAKE","Entry:"+name+" for:"+date+" inserted....");
+            CovidDataBase.insert(name, bundesland, bez, cases100K, date, beenHere, covidDataBase);
+            Log.v("DBMAKE", "Entry:" + name + " for:" + date + " inserted....");
         }
+
+        // Get and publish entries for this location
+        List<CovidSearchResultData> statistcs = new ArrayList<>();
+        statistcs = CovidDataBase.getEntry(name, bundesland, bez, covidDataBase);
+
+        StringBuilder result = new StringBuilder();
+
+        for (CovidSearchResultData d : statistcs) {
+            result.append(d.getCasesPer10K() + " " + d.getLastUpdate() + " ");
+
+            if (d.beenHere())
+                result.append("BESUCHT\n\n");
+            else
+                result.append("\n\n");
+        }
+        statisticsData.postValue(result.toString());
     }
 
     /**

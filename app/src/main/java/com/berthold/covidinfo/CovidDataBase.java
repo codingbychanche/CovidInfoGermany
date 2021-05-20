@@ -86,6 +86,11 @@ public class CovidDataBase {
         return (conn);
     }
 
+    //
+    //
+    // Database generic methods.
+    //
+    //
     /**
      * This handles a generic sql- request.
      *
@@ -145,6 +150,11 @@ public class CovidDataBase {
         return false;
     }
 
+    //
+    //
+    // App specific methods
+    //
+    //
     /**
      * Checks if an entry for an given date already exists.
      *
@@ -211,6 +221,10 @@ public class CovidDataBase {
                     String fdate=rs.getString("lastUpdate");
 
                     CovidSearchResultData entry=new CovidSearchResultData("-",fbundesland,fname,fbez,casesPer100K,fdate);
+
+                    boolean beenHere=rs.getBoolean("beenhere");
+                    entry.setBeenHere(beenHere);
+
                     searchResultList.add(entry);
 
                     Log.v ("DBMAKE",rs.getString("name")+" "+rs.getString("bundesland")+" "+rs.getString("bez")+"  "+rs.getFloat("casesPer100K"));

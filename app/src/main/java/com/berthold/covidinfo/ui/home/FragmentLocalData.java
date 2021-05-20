@@ -51,7 +51,7 @@ public class FragmentLocalData extends Fragment implements LocationListener {
     static FragmentLocalDataViewModel fragmentLocalDataViewModel;
 
     // UI
-    TextView townView, bezView, bundeslandView, casesPer10KView, lasUpdateView, localAddressView,localStatisticsView;
+    TextView townView, bezView, bundeslandView, casesPer10KView, lasUpdateView, localAddressView, localStatisticsView;
     ProgressBar networkIsUpdating, locationIsUpdating;
 
     public FragmentLocalData() {
@@ -85,7 +85,7 @@ public class FragmentLocalData extends Fragment implements LocationListener {
         casesPer10KView = view.findViewById(R.id.cases_per_10K);
         lasUpdateView = view.findViewById(R.id.last_update);
         localAddressView = view.findViewById(R.id.current_address);
-        localStatisticsView=view.findViewById(R.id.statistics);
+        localStatisticsView = view.findViewById(R.id.statistics);
 
         //
         // When clicked, open web browser an try to find local information.
@@ -190,16 +190,15 @@ public class FragmentLocalData extends Fragment implements LocationListener {
         });
 
         //
-        // Receives statistics for the current location
+        // Receives statistics (older data saved inside the database) for the current location
         //
         fragmentLocalDataViewModel.getStatisticsData().observe(getViewLifecycleOwner(), new Observer<List<CovidSearchResultData>>() {
             @Override
             public void onChanged(List<CovidSearchResultData> s) {
-                String result;
-                for (CovidSearchResultData d:s) {
-                    result = d.getCasesPer10K() + "//" + d.getLastUpdate();
-                    localStatisticsView.setText(result);
-                }
+                int l = s.size() - 1;
+
+                String result = s.get(l-1).getCasesPer10K() + " " + s.get(l-1).getLastUpdate() + "\n";
+                localStatisticsView.setText(result);
 
             }
         });
@@ -214,9 +213,7 @@ public class FragmentLocalData extends Fragment implements LocationListener {
      * @param grantResults
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         // Location access granted?
         if (requestCode == REQUEST_PERMISSION_RESULT_LOCATION) {
@@ -242,6 +239,9 @@ public class FragmentLocalData extends Fragment implements LocationListener {
             locationManager.removeUpdates(this);
     }
 
+    /**
+     * Tells the Android system to start location updates.....
+     */
     private void startLocationUpdates() {
 
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -269,6 +269,8 @@ public class FragmentLocalData extends Fragment implements LocationListener {
 
     /**
      * Geocoder updates.
+     * <p>
+     * Position updates from the location manager are received here.
      */
     @Override
     public void onLocationChanged(Location location) {

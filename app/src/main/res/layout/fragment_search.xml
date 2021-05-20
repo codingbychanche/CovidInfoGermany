@@ -71,10 +71,9 @@
         android:id="@+id/progress_waiting_for_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:alpha=".5"
         android:background="@drawable/rounded_corner_dark_back"
         android:visibility="gone"
-        android:alpha=".5"
-        app:layout_constraintBottom_toBottomOf="@+id/covid_data"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search">

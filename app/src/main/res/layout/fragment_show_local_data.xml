@@ -38,9 +38,10 @@
     <TextView
         android:id="@+id/current_address"
         style="@style/TableRowsRemark"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:drawableLeft="@android:drawable/ic_menu_myplaces"
+        android:drawableRight="@android:drawable/ic_media_rew"
         android:hint="LOCAL ADDRESS"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/imageView2"
@@ -48,9 +49,9 @@
 
     <TextView
         android:id="@+id/statistics"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:drawableLeft="@android:drawable/ic_menu_recent_history"
+        android:drawableLeft="@android:drawable/ic_media_ff"
         android:hint="STATS"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/current_address"></TextView>
@@ -58,11 +59,12 @@
     <TextView
         android:id="@+id/town"
         style="@style/link"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:hint="TOWN"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintRight_toLeftOf="@id/cases_per_10K"
         app:layout_constraintTop_toTopOf="parent"></TextView>
 
     <TextView

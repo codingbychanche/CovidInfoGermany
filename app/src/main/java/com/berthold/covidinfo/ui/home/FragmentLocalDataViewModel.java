@@ -94,8 +94,8 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
         String date = covidData.get(0).getLastUpdate();
         float cases100K = (float)covidData.get(0).getCasesPer10K();
 
-        // Data base entries are only created when the the either not already exist or
-        // date last updated does not exist for any entry matching name, bundesland and bez....
+        // Data base entries are only created when date last updated does not exist
+        // for any entry matching name, bundesland and bez....
         if (CovidDataBase.covidDataForThisDateExists(name, bundesland, bez, date, covidDataBase))
             Log.v("DBMAKE", " Exists");
         else {
