@@ -22,18 +22,6 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
     //
     // Live data
     //
-    // Progressbar showing updates for the network connection when fetching covid data
-    private MutableLiveData<Boolean> networkIsUpdating = new MutableLiveData<>();
-    public MutableLiveData<Boolean> networkIsUpdating() {
-        return networkIsUpdating;
-    }
-
-    // Progressbar showing location updates
-    private MutableLiveData<Boolean> locationIsUpdating = new MutableLiveData<>();
-    public MutableLiveData<Boolean> getLocationIsUpdating() {
-        return locationIsUpdating;
-    }
-
     // Covid data
     private MutableLiveData<List<CovidSearchResultData>> covidDataAsJson;
     public LiveData<List<CovidSearchResultData>> updateCovidData() {
@@ -49,8 +37,8 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
     }
 
     // Statistics
-    private MutableLiveData<List<CovidSearchResultData>> statisticsData =new MutableLiveData<>();
-    public MutableLiveData<List<CovidSearchResultData>> getStatisticsData(){
+    private MutableLiveData<String> statisticsData =new MutableLiveData<>();
+    public MutableLiveData<String> getStatisticsData(){
         return statisticsData;
     }
 
@@ -58,8 +46,6 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
      * Get's the data via the api from the network.
      */
     public void getCovidData(String searchQuery) {
-
-        networkIsUpdating.postValue(true);
 
         String apiAddressStadtkreise = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=covid-19-germany-landkreise&q={0}&facet=last_update&facet=name&facet=rs&facet=bez&facet=bl";
 
@@ -82,7 +68,6 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
      */
     @Override
     public void receive(List<CovidSearchResultData> covidData) {
-        networkIsUpdating.postValue(false);
         covidDataAsJson.postValue(covidData);
 
         Connection covidDataBase = MainActivity.covidDataBase;
@@ -104,9 +89,8 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
         }
 
         // Get and publish entries for this location
-        List<CovidSearchResultData> statistcs=new ArrayList<>();
-        statistcs=CovidDataBase.getEntry(name,bundesland,bez,covidDataBase);
-        statisticsData.postValue(statistcs);
+        String result=CovidDataEvaluate.getTrend(name, bundesland, bez, covidDataBase);
+        statisticsData.postValue(result);
     }
 
     /**

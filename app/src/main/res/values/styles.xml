@@ -43,7 +43,7 @@
     <style name="link" parent="TextAppearance.AppCompat">
         <item name="android:textSize">18dp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/purple_500</item>
+        <item name="android:textColor">@color/purple_700</item>
     </style>
 
     <!-- Table rows -->

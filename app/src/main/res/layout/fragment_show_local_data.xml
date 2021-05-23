@@ -8,24 +8,6 @@
     app:layoutDescription="@xml/fragment_show_local_data_scene"
     tools:context=".ui.statistics.StatisticsFragment">
 
-    <ProgressBar
-        android:id="@+id/network_is_updating_progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="@+id/imageView2"></ProgressBar>
-
-    <ProgressBar
-        android:id="@+id/location_is_updating_progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/current_address"
-        app:layout_constraintTop_toTopOf="@+id/current_address"></ProgressBar>
-
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
@@ -38,7 +20,7 @@
     <TextView
         android:id="@+id/current_address"
         style="@style/TableRowsRemark"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@android:drawable/ic_menu_myplaces"
         android:drawableRight="@android:drawable/ic_media_rew"
@@ -49,7 +31,7 @@
 
     <TextView
         android:id="@+id/statistics"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableLeft="@android:drawable/ic_media_ff"
         android:hint="STATS"
@@ -91,7 +73,6 @@
         style="@style/DialogBoxStyleTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:background="@drawable/rounded_corner_dark_back"
         android:hint="CASES"
         android:textAlignment="center"
@@ -109,4 +90,26 @@
         app:layout_constraintStart_toStartOf="@+id/cases_per_10K"
         app:layout_constraintTop_toBottomOf="@+id/cases_per_10K"></TextView>
 
+    <FrameLayout
+        android:id="@+id/waiting"
+        android:visibility="gone"
+        android:background="@drawable/rounded_corner_dark_back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></ProgressBar>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="No Data Yet....."
+        tools:layout_editor_absoluteX="123dp"
+        tools:layout_editor_absoluteY="163dp"></TextView>
+
+    </FrameLayout>
 </androidx.constraintlayout.motion.widget.MotionLayout>

@@ -46,6 +46,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     compile files('libs/h2-1.4.191.jar')
+    compile files('libs/TrendAnalyzer.jar')
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

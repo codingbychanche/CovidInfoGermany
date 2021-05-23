@@ -23,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -52,7 +53,7 @@ public class FragmentLocalData extends Fragment implements LocationListener {
 
     // UI
     TextView townView, bezView, bundeslandView, casesPer10KView, lasUpdateView, localAddressView, localStatisticsView;
-    ProgressBar networkIsUpdating, locationIsUpdating;
+    View waiting;
 
     public FragmentLocalData() {
         // Empty!
@@ -77,8 +78,9 @@ public class FragmentLocalData extends Fragment implements LocationListener {
         fragmentLocalDataViewModel = ViewModelProviders.of(requireActivity()).get(FragmentLocalDataViewModel.class);
 
         // UI
-        networkIsUpdating = view.findViewById(R.id.network_is_updating_progress);
-        locationIsUpdating = view.findViewById(R.id.location_is_updating_progress);
+        waiting = view.findViewById(R.id.waiting);
+        waiting.setVisibility(View.VISIBLE);
+
         townView = view.findViewById(R.id.town);
         bezView = view.findViewById(R.id.bez);
         bundeslandView = view.findViewById(R.id.bundesland);
@@ -131,9 +133,14 @@ public class FragmentLocalData extends Fragment implements LocationListener {
             @Override
             public void onChanged(@Nullable List<CovidSearchResultData> covidSearchResultData) {
 
-                fragmentLocalDataViewModel.networkIsUpdating().setValue(false);
 
                 if (covidSearchResultData != null) {
+
+                    waiting.setVisibility(View.GONE);
+                    // ToDo Strangely the waiting- view does not disappear when vew.gone is used... this does....
+                    waiting.setAlpha(0);
+
+
                     for (CovidSearchResultData r : covidSearchResultData) {
                         townView.setText(r.getName());
                         bezView.setText(r.getBez());
@@ -148,33 +155,6 @@ public class FragmentLocalData extends Fragment implements LocationListener {
                 }
             }
         });
-
-        //
-        // Receives status update when covid data is fetched from the network
-        //
-        fragmentLocalDataViewModel.networkIsUpdating().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean isUpdating) {
-                if (isUpdating)
-                    networkIsUpdating.setVisibility(View.VISIBLE);
-                else
-                    networkIsUpdating.setVisibility(View.GONE);
-            }
-        });
-
-        //
-        // Receives status updates when the location manager is working.
-        //
-        fragmentLocalDataViewModel.getLocationIsUpdating().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean isUpdating) {
-                if (isUpdating)
-                    locationIsUpdating.setVisibility(View.VISIBLE);
-                else
-                    locationIsUpdating.setVisibility(View.GONE);
-            }
-        });
-
 
         //
         // Receives the full address of your location
@@ -192,14 +172,10 @@ public class FragmentLocalData extends Fragment implements LocationListener {
         //
         // Receives statistics (older data saved inside the database) for the current location
         //
-        fragmentLocalDataViewModel.getStatisticsData().observe(getViewLifecycleOwner(), new Observer<List<CovidSearchResultData>>() {
+        fragmentLocalDataViewModel.getStatisticsData().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
-            public void onChanged(List<CovidSearchResultData> s) {
-                int l = s.size() - 1;
-
-                String result = s.get(l-1).getCasesPer10K() + " " + s.get(l-1).getLastUpdate() + "\n";
-                localStatisticsView.setText(result);
-
+            public void onChanged(String result) {
+                localStatisticsView.setText(HtmlCompat.fromHtml(result, 0));
             }
         });
     }
@@ -262,7 +238,6 @@ public class FragmentLocalData extends Fragment implements LocationListener {
             }
 
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, UPDATE_LOCATION_EVERY_MS, UPDATE_WHEN_DEV_IS_MOVED_MORE_THAN_X_METERS, this);
-            fragmentLocalDataViewModel.getLocationIsUpdating().postValue(true);
             Log.v("LOCLOC_UP", "started");
         }
     }
@@ -287,8 +262,6 @@ public class FragmentLocalData extends Fragment implements LocationListener {
                 final String city;
 
                 try {
-                    fragmentLocalDataViewModel.getLocationIsUpdating().postValue(true);
-
                     DecimalFormat df = new DecimalFormat();
                     df.setMaximumFractionDigits(3);
 
@@ -317,10 +290,8 @@ public class FragmentLocalData extends Fragment implements LocationListener {
                     // This invokes the associated observer
                     fragmentLocalDataViewModel.localAddress().postValue(addressLine);
 
-                    fragmentLocalDataViewModel.getLocationIsUpdating().postValue(false);
-
                 } catch (Exception e) {
-                    fragmentLocalDataViewModel.localAddress().postValue("Ups, on error occured where it should not..." + e.toString());
+                    fragmentLocalDataViewModel.localAddress().postValue("Ups, an error occured where it should not..." + e.toString());
                 }
             }
         }).start();

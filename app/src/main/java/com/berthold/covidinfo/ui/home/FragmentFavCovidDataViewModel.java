@@ -40,7 +40,6 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
 
     // Statistics
     private MutableLiveData<String> statisticsData = new MutableLiveData<>();
-
     public MutableLiveData<String> getStatisticsData() {
         return statisticsData;
     }
@@ -94,20 +93,8 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
         }
 
         // Get and publish entries for this location
-        List<CovidSearchResultData> statistcs = new ArrayList<>();
-        statistcs = CovidDataBase.getEntry(name, bundesland, bez, covidDataBase);
-
-        StringBuilder result = new StringBuilder();
-
-        for (CovidSearchResultData d : statistcs) {
-            result.append(d.getCasesPer10K() + " " + d.getLastUpdate() + " ");
-
-            if (d.beenHere())
-                result.append("BESUCHT\n\n");
-            else
-                result.append("\n\n");
-        }
-        statisticsData.postValue(result.toString());
+        String result=CovidDataEvaluate.getTrend(name, bundesland, bez, covidDataBase);
+        statisticsData.postValue(result);
     }
 
     /**

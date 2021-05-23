@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         // Show favourite location
         FragmentTransaction ft2 = manager.beginTransaction();
         ft2.setReorderingAllowed(true);
-        ft2.replace(R.id.fragment_fav_covid_data_view, new FragmentFavCovidDataView(), "Fragment_1");
+        ft2.replace(R.id.fragment_fav_covid_data_view, new FragmentFavCovidDataView(), "Fragment_2");
         ft2.commitAllowingStateLoss();
 
         // View model providers

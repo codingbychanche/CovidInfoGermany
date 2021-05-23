@@ -1,6 +1,8 @@
 package com.berthold.covidinfo.ui.home;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -11,10 +13,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.berthold.covidinfo.MainActivity;
 import com.berthold.covidinfo.R;
 
 import java.util.List;
@@ -107,6 +111,12 @@ public class FragmentFavCovidDataView extends Fragment {
                 casesPer10KView.setTextColor(CovidDataCasesColorCoder.getColor((int) r.getCasesPer10K()));
 
                 lasUpdateView.setText(r.getLastUpdate());
+
+                // ToDo, DRY!! See View models.....
+                SharedPreferences sp= requireActivity().getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString("favLocation", r.getName() + " " + r.getBez() + " " + r.getBundesland());
+                editor.apply();
             }
         });
 
@@ -116,7 +126,8 @@ public class FragmentFavCovidDataView extends Fragment {
         fragmentFavCovidDataViewModel.getStatisticsData().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String result) {
-                localStatisticsView.setText(result);
+
+                localStatisticsView.setText(HtmlCompat.fromHtml(result,0));
             }
         });
 

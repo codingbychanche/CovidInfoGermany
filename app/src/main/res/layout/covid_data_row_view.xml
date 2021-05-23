@@ -79,7 +79,6 @@
                 style="@style/DialogBoxStyleTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 android:background="@drawable/rounded_corner_dark_back"
                 android:hint="CASES"
                 android:textAlignment="center"
