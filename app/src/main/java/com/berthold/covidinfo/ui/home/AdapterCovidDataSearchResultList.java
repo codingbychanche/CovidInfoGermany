@@ -14,7 +14,11 @@ import com.berthold.covidinfo.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CovidDataAdapter extends RecyclerView.Adapter<CovidDataAdapter.ViewHolder> {
+/**
+ * Displays the searc results
+ *
+ */
+public class AdapterCovidDataSearchResultList extends RecyclerView.Adapter<AdapterCovidDataSearchResultList.ViewHolder> {
 
     private List<CovidSearchResultData> covidSearchResultDataList = new ArrayList<>();
     private Context context;
@@ -22,7 +26,7 @@ public class CovidDataAdapter extends RecyclerView.Adapter<CovidDataAdapter.View
     private CovidDataSearchResult clicked;
 
 
-    public CovidDataAdapter(List<CovidSearchResultData> covidSearchResultDataList, Context context, CovidDataSearchResult clicked) {
+    public AdapterCovidDataSearchResultList(List<CovidSearchResultData> covidSearchResultDataList, Context context, CovidDataSearchResult clicked) {
         this.covidSearchResultDataList = covidSearchResultDataList;
         this.context = context;
         this.clicked=clicked;
@@ -49,9 +53,9 @@ public class CovidDataAdapter extends RecyclerView.Adapter<CovidDataAdapter.View
 
     // Create new views (invoked by the layout manager)
     @Override
-    public CovidDataAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AdapterCovidDataSearchResultList.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.covid_data_row_view, parent, false);
-        CovidDataAdapter.ViewHolder vh = new CovidDataAdapter.ViewHolder(v);
+        AdapterCovidDataSearchResultList.ViewHolder vh = new AdapterCovidDataSearchResultList.ViewHolder(v);
         return vh;
     }
 

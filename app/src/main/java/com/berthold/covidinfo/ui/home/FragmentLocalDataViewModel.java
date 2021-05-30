@@ -18,7 +18,12 @@ import java.util.List;
  *
  */
 public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearchLocalCovidData.getCovidDataInterface {
-    MainActivity m;
+
+    //
+    // Convenience fields for easy access to the local data....
+    //
+    private String localName,localState,localCounty;
+
     //
     // Live data
     //
@@ -79,6 +84,11 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
         String date = covidData.get(0).getLastUpdate();
         float cases100K = (float)covidData.get(0).getCasesPer10K();
 
+        // Init convenience fields
+        localName=name;
+        localState=bundesland;
+        localCounty=bez;
+
         // Data base entries are only created when date last updated does not exist
         // for any entry matching name, bundesland and bez....
         if (CovidDataBase.covidDataForThisDateExists(name, bundesland, bez, date, covidDataBase))
@@ -104,5 +114,20 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
         String town = covidDataAsJson.getValue().get(0).getName();
         String url = (MessageFormat.format("https://de.search.yahoo.com/yhs/search?hspart=ddc&hsimp=yhs-linuxmint&type=__alt__ddc_linuxmint_com&p={0}+covid+regeln)", town));
         return url;
+    }
+
+    /**
+     * Getters for convenience fields.
+     */
+    public String getLocalName() {
+        return localName;
+    }
+
+    public String getLocalState(){
+        return localState;
+    }
+
+    public String getLocalCounty(){
+        return localCounty;
     }
 }

@@ -30,4 +30,7 @@
 
     <!-- Fav data/ local data fragmenr -->
     <string name="remark_currentness">Stand der Daten:</string>
+
+    <!-- Fragment showing location info in Detail -->
+    <string name="close_location_info">Beenden</string>
 </resources>

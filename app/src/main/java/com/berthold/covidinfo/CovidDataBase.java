@@ -227,7 +227,7 @@ public class CovidDataBase {
 
                     searchResultList.add(entry);
 
-                    Log.v ("DBMAKE",rs.getString("name")+" "+rs.getString("bundesland")+" "+rs.getString("bez")+"  "+"   "+rs.getString("lastUpdate")+"  "+rs.getFloat("casesPer100K"));
+                    Log.v ("-DBMAKE",rs.getString("name")+" "+rs.getString("bundesland")+" "+rs.getString("bez")+"  "+"   "+rs.getString("lastUpdate")+"  "+rs.getFloat("casesPer100K"));
                 }
             } else{
                 // No matching entry found....

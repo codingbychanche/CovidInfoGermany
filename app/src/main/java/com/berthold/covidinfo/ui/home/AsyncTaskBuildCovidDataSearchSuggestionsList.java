@@ -2,14 +2,6 @@ package com.berthold.covidinfo.ui.home;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
-
-import androidx.lifecycle.ViewModel;
-
-import com.berthold.covidinfo.ui.home.CovidDataAdapter;
-import com.berthold.covidinfo.ui.home.CovidSearchResultData;
-import com.berthold.covidinfo.ui.home.FragmentSearchViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +16,6 @@ import java.util.List;
 
 import javaUtils.FormatTimeStamp;
 
-import static com.berthold.covidinfo.ui.home.DecodeJsonResult.getHits;
 import static com.berthold.covidinfo.ui.home.DecodeJsonResult.getRecordNr;
 
 /**
@@ -40,13 +31,13 @@ import static com.berthold.covidinfo.ui.home.DecodeJsonResult.getRecordNr;
 public class AsyncTaskBuildCovidDataSearchSuggestionsList extends AsyncTask<String, CovidSearchResultData, CovidSearchResultData> {
 
     private String url, searchQuery;
-    private CovidDataAdapter covidDataAdapter;
+    private AdapterCovidDataSearchResultList adapterCovidDataSearchResultList;
     private FragmentSearchViewModel waitingForCovidDataLoadedFromNetowrk;
 
-    public AsyncTaskBuildCovidDataSearchSuggestionsList(String url, String searchQuery, CovidDataAdapter covidDataAdapter, FragmentSearchViewModel waitingForCovidDataLoadedFromNetwork) {
+    public AsyncTaskBuildCovidDataSearchSuggestionsList(String url, String searchQuery, AdapterCovidDataSearchResultList adapterCovidDataSearchResultList, FragmentSearchViewModel waitingForCovidDataLoadedFromNetwork) {
         this.url = url;
         this.searchQuery = searchQuery;
-        this.covidDataAdapter = covidDataAdapter;
+        this.adapterCovidDataSearchResultList = adapterCovidDataSearchResultList;
         this.waitingForCovidDataLoadedFromNetowrk = waitingForCovidDataLoadedFromNetwork;
     }
 
@@ -55,8 +46,8 @@ public class AsyncTaskBuildCovidDataSearchSuggestionsList extends AsyncTask<Stri
         // Setup progress bars etc......
         // waitingForCovidDataLoadedFromNetowrk.setVisibility(View.VISIBLE);
         waitingForCovidDataLoadedFromNetowrk.searchListIsUpdating().postValue(true);
-        covidDataAdapter.clear();
-        covidDataAdapter.notifyDataSetChanged();
+        adapterCovidDataSearchResultList.clear();
+        adapterCovidDataSearchResultList.notifyDataSetChanged();
     }
 
     /**
@@ -169,8 +160,8 @@ public class AsyncTaskBuildCovidDataSearchSuggestionsList extends AsyncTask<Stri
 
         // Update result
         Log.v("ASYNCASYNC", "UPDATE" + e[0].getName() + " " + e[0].getLastUpdate());
-        covidDataAdapter.add(e[0]);
-        covidDataAdapter.notifyDataSetChanged();
+        adapterCovidDataSearchResultList.add(e[0]);
+        adapterCovidDataSearchResultList.notifyDataSetChanged();
     }
 
     /**

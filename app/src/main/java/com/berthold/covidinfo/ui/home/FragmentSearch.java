@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * View Model for the search fragment
  */
-public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDataSearchResult {
+public class FragmentSearch extends Fragment implements AdapterCovidDataSearchResultList.CovidDataSearchResult {
 
     // UI
     private FragmentSearchViewModel fragmentSearchViewModel;
@@ -37,7 +37,7 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
 
     private RecyclerView covidDataRecyclerView;
     private RecyclerView.LayoutManager covidDataLayoutManager;
-    private CovidDataAdapter covidDataAdapter;
+    private AdapterCovidDataSearchResultList adapterCovidDataSearchResultList;
     private List<CovidSearchResultData> covidDataList = new ArrayList<>();
 
     // API
@@ -66,8 +66,8 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
         covidDataLayoutManager = new LinearLayoutManager(getActivity());
         covidDataRecyclerView.setLayoutManager(covidDataLayoutManager);
 
-        covidDataAdapter = new CovidDataAdapter(covidDataList, getContext(), this);
-        covidDataRecyclerView.setAdapter(covidDataAdapter);
+        adapterCovidDataSearchResultList = new AdapterCovidDataSearchResultList(covidDataList, getContext(), this);
+        covidDataRecyclerView.setAdapter(adapterCovidDataSearchResultList);
 
         // UI
         waitingForCovidDataLoadedFromNetwork = view.findViewById(R.id.progress_waiting_for_data);
@@ -89,7 +89,7 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
                 if (!sq.isEmpty()) {
                     if (getCovidData != null)
                         getCovidData.cancel(true);
-                    getCovidData = new AsyncTaskBuildCovidDataSearchSuggestionsList(apiAddressStadtkreise, sq, covidDataAdapter, fragmentSearchViewModel);
+                    getCovidData = new AsyncTaskBuildCovidDataSearchSuggestionsList(apiAddressStadtkreise, sq, adapterCovidDataSearchResultList, fragmentSearchViewModel);
                     getCovidData.execute();
                 } else {
                     if (getCovidData != null)
@@ -149,7 +149,7 @@ public class FragmentSearch extends Fragment implements CovidDataAdapter.CovidDa
     }
 
     /**
-     * Invoked by {@link CovidDataAdapter} when an element inside the
+     * Invoked by {@link AdapterCovidDataSearchResultList} when an element inside the
      * list of search results was clicked.
      *
      * @param covidSearchResultData

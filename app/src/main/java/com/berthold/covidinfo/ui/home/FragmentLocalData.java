@@ -25,6 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -102,6 +103,18 @@ public class FragmentLocalData extends Fragment implements LocationListener {
                     Intent Getintent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(Getintent);
                 }
+            }
+        });
+
+        //
+        // When clicked, show detail view for this location
+        //
+        casesPer10KView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm =requireActivity().getSupportFragmentManager();
+                FragmentLocationDetailView newChallenge = FragmentLocationDetailView.newInstance("Titel");
+                newChallenge.show(fm, "fragment_location_detail_view");
             }
         });
 
@@ -283,8 +296,9 @@ public class FragmentLocalData extends Fragment implements LocationListener {
                     for (int n = 0; n <= addresses.size() - 1; n++)
                         Log.v("ADDRESSES", addresses.get(n).getAddressLine(n));
 
-
                     // Gets the covid data from the network connection
+                    // ToDo: What if two matches are found? e.g. Karlsruhe (Stadtkreis) and Karlsruhe (landkreis) => BUG!!!
+                    // First match is send as network request. How can I get the right infomration from the geocoder result?
                     fragmentLocalDataViewModel.getCovidData(city + " " + adminArea);
 
                     // This invokes the associated observer
