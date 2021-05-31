@@ -31,7 +31,7 @@ public class FragmentLocationDetailViewModel extends ViewModel {
 
         List <CovidSearchResultData> d=new ArrayList<>();
         d=CovidDataBase.getEntry(name,state,county,covidDataBase);
-        Log.v("LOCALLOCAL",d.get(0).getName());
+        Log.v("---LOCALLOCAL",d.get(0).getName());
         covidDataAsJson.postValue(d);
     }
 }

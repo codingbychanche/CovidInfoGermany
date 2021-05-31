@@ -23,6 +23,11 @@ import com.berthold.covidinfo.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Opens an info dialog which shows some additional, detailed
+ * information about either the current location or the
+ * favourite location...
+ */
 public class FragmentLocationDetailView extends DialogFragment {
 
     // ViewModel
@@ -78,12 +83,7 @@ public class FragmentLocationDetailView extends DialogFragment {
         String name = fragmentLocalDataViewModel.getLocalName();
         String state = fragmentLocalDataViewModel.getLocalState();
         String county = fragmentLocalDataViewModel.getLocalCounty();
-
-
         fragmentLocationDetailViewModel.getPastDataForThisLocation(name, state, county);
-
-
-
 
         // Finish
         okButton = (Button) view.findViewById(R.id.close_location_info);
@@ -119,16 +119,15 @@ public class FragmentLocationDetailView extends DialogFragment {
             @Override
             public void onChanged(@Nullable List<CovidSearchResultData> covidSearchResultData) {
 
-                for (CovidSearchResultData r:covidSearchResultData)
+                if (covidSearchResultData != null) {
+                    for (CovidSearchResultData r : covidSearchResultData)
 
-                    Log.v("LOCALLOCAL", r.getLastUpdate() + "," + r.getCasesPer10K());
+                        Log.v("LOCALLOCAL", r.getLastUpdate() + "," + r.getCasesPer10K());
 
-                pastDataListView = view.findViewById(R.id.past_data_list);
-                ArrayAdapter pastListViewAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, pastDataList);
-                pastDataListView.setAdapter(pastListViewAdapter);
-
-
-
+                    pastDataListView = view.findViewById(R.id.past_data_list);
+                    ArrayAdapter pastListViewAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, pastDataList);
+                    pastDataListView.setAdapter(pastListViewAdapter);
+                }
             }
         });
     }

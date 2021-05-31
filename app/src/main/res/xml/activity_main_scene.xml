@@ -3,14 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
-    <Transition
-        motion:constraintSetEnd="@+id/end"
-        motion:constraintSetStart="@id/start"
-        motion:duration="1000">
-       <KeyFrameSet>
-       </KeyFrameSet>
-    </Transition>
-
     <ConstraintSet android:id="@+id/start">
         <Constraint
             android:layout_height="150dp"
@@ -28,13 +20,6 @@
             motion:layout_constraintLeft_toLeftOf="parent"
             motion:layout_constraintRight_toRightOf="parent"
             android:id="@+id/nav_host_fragment" />
-        <Constraint
-            android:layout_height="wrap_content"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintLeft_toLeftOf="parent"
-            motion:layout_constraintRight_toRightOf="parent"
-            android:layout_width="match_parent"
-            android:id="@+id/nav_view" />
         <Constraint
             android:layout_height="100dp"
             motion:layout_constraintStart_toStartOf="parent"
@@ -62,14 +47,6 @@
             android:layout_width="match_parent"
             android:id="@+id/fragment_local_covid_data_view"
             motion:layout_editor_absoluteY="5dp" />
-
-        <Constraint
-            android:layout_height="wrap_content"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintLeft_toLeftOf="parent"
-            motion:layout_constraintRight_toRightOf="parent"
-            android:layout_width="match_parent"
-            android:id="@+id/nav_view" />
         <Constraint
             android:layout_height="100dp"
             motion:layout_constraintStart_toStartOf="parent"
@@ -80,10 +57,10 @@
     </ConstraintSet>
 
     <Transition
-        motion:constraintSetEnd="@+id/start"
-        motion:constraintSetStart="@+id/end">
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@+id/start">
         <OnSwipe
-            motion:dragDirection="dragDown"
+            motion:dragDirection="dragUp"
             motion:duration="10000"
             motion:touchAnchorSide="bottom"
             />
