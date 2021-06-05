@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -80,6 +81,18 @@ public class FragmentFavCovidDataView extends Fragment {
                     Intent Getintent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(Getintent);
                 }
+            }
+        });
+
+        //
+        // When clicked, show detail view for this location
+        //
+        casesPer10KView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = requireActivity().getSupportFragmentManager();
+                FragmentLocationDetailView newChallenge = FragmentLocationDetailView.newInstance("fav");
+                newChallenge.show(fm, "fragment_location_detail_view");
             }
         });
 

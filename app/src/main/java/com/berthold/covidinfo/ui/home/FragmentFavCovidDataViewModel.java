@@ -19,8 +19,12 @@ import java.util.List;
  * This view model handles all search query's
  */
 public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovidLocationData {
+    //
+    // Convenience fields for easy access to the local data....
+    //
+    private String localName,localState,localCounty;
+    private String statistics;
 
-    ThreadGetFavLocCovidData t;
     // progressbar
     private MutableLiveData<Boolean> isUpdating = new MutableLiveData<>();
 
@@ -28,9 +32,11 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
         return isUpdating;
     }
 
+    //
+    // Live data
+    //
     // Covid data
     public MutableLiveData<CovidSearchResultData> favCovidDataLocation;
-
     public MutableLiveData<CovidSearchResultData> updateFavLocation() {
         if (favCovidDataLocation == null) {
             favCovidDataLocation = new MutableLiveData<>();
@@ -66,11 +72,9 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
      */
     @Override
     public void getFavLocation(List<CovidSearchResultData> covidData) {
-        Log.v("THREADTHREAD", "Got it");
         isUpdating.postValue(false);
         if (covidData != null) {
             CovidSearchResultData r = covidData.get(0);
-            Log.v("THREADTHREAD", covidData.get(0).getName());
             favCovidDataLocation.postValue(r);
         }
 
@@ -82,6 +86,11 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
         String bez = covidData.get(0).getBez();
         String date = covidData.get(0).getLastUpdate();
         float cases100K = (float) covidData.get(0).getCasesPer10K();
+
+        // Init convenience fields
+        localName=name;
+        localState=bundesland;
+        localCounty=bez;
 
         // Data base entries are only created when date last updated does not exist
         // for any entry matching name, bundesland and bez....
@@ -95,6 +104,7 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
         // Get and publish entries for this location
         String result=CovidDataEvaluate.getTrend(name, bundesland, bez, covidDataBase);
         statisticsData.postValue(result);
+        statistics=result; // Set convenience field
     }
 
     /**
@@ -134,10 +144,26 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
      * @param mainActivity Context.
      */
     public void restoreFromSharedPreferences(MainActivity mainActivity) {
-        Log.v("SHAREDSHARED", "GET");
         SharedPreferences sp;
         sp = mainActivity.getPreferences(Context.MODE_PRIVATE);
         String searchQuery = sp.getString("favLocation", null);
         getFavLocationCovidData(searchQuery);
     }
+
+    /**
+     * Getters for convenience fields.
+     */
+    public String getLocalName() {
+        return localName;
+    }
+
+    public String getLocalState(){
+        return localState;
+    }
+
+    public String getLocalCounty(){
+        return localCounty;
+    }
+
+    public String getLocalStatistics(){return statistics;}
 }

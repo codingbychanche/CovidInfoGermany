@@ -23,6 +23,7 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
     // Convenience fields for easy access to the local data....
     //
     private String localName,localState,localCounty;
+    private String localStatistics;
 
     //
     // Live data
@@ -101,6 +102,7 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
         // Get and publish entries for this location
         String result=CovidDataEvaluate.getTrend(name, bundesland, bez, covidDataBase);
         statisticsData.postValue(result);
+        localStatistics=result;
     }
 
     /**
@@ -130,4 +132,7 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
     public String getLocalCounty(){
         return localCounty;
     }
+
+    public String getLocalStatistics(){return localStatistics;}
+
 }

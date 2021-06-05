@@ -106,17 +106,6 @@ public class FragmentLocalData extends Fragment implements LocationListener {
             }
         });
 
-        //
-        // When clicked, show detail view for this location
-        //
-        casesPer10KView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm =requireActivity().getSupportFragmentManager();
-                FragmentLocationDetailView newChallenge = FragmentLocationDetailView.newInstance("Titel");
-                newChallenge.show(fm, "fragment_location_detail_view");
-            }
-        });
 
         // @rem:Shows how to check if permissions are granted and how to show a dialog to tell the user to do so....@@
         // @rem:If the permissions are granted, then the Android- System changes that by itself and@@
@@ -165,6 +154,18 @@ public class FragmentLocalData extends Fragment implements LocationListener {
                         lasUpdateView.setText(r.getLastUpdate());
 
                     }
+
+                    //
+                    // When clicked, show detail view for this location
+                    //
+                    casesPer10KView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FragmentManager fm = requireActivity().getSupportFragmentManager();
+                            FragmentLocationDetailView newChallenge = FragmentLocationDetailView.newInstance("local");
+                            newChallenge.show(fm, "fragment_location_detail_view");
+                        }
+                    });
                 }
             }
         });
@@ -188,7 +189,10 @@ public class FragmentLocalData extends Fragment implements LocationListener {
         fragmentLocalDataViewModel.getStatisticsData().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String result) {
-                localStatisticsView.setText(HtmlCompat.fromHtml(result, 0));
+                if (result.isEmpty())
+                    localStatisticsView.setText(HtmlCompat.fromHtml("Keine daten vorhanden....", 0));
+                else
+                    localStatisticsView.setText(HtmlCompat.fromHtml(result, 0));
             }
         });
     }

@@ -199,7 +199,7 @@ public class CovidDataBase {
      * @param bez           County.
      * @param conn          The database.
      *
-     * @return A list of {@link CovidSearchResultData} objects.
+     * @return A list of {@link CovidSearchResultData} objects. Returns 'null' if no entries could be found.
      */
     public static List<CovidSearchResultData> getEntry(String name, String bundesland, String bez, Connection conn){
 
