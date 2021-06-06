@@ -10,10 +10,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/cases_per_10K"
+        android:textSize="35dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corner_dark_back"
+        android:hint="CASES"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/bez"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/town"></TextView>
 
     <TextView
+        android:id="@+id/updated"
+        style="@style/DialogBoxTextBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="UPDATE"
+        app:layout_constraintEnd_toEndOf="@+id/cases_per_10K"
+        app:layout_constraintStart_toStartOf="@+id/cases_per_10K"
+        app:layout_constraintTop_toBottomOf="@+id/cases_per_10K"></TextView>
+    <TextView
         android:id="@+id/town"
-        style="@style/TableRowsTitel"
+        style="@style/DialogBoxStyleTitle"
         android:hint="TOWN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,12 +44,13 @@
 
     <TextView
         android:id="@+id/fragment_location_detail_view_info_text"
+        style="@style/DialogBoxTextBody"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:hint="INFO"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/town"></TextView>
+        app:layout_constraintTop_toBottomOf="@+id/updated"></TextView>
 
     <ListView
         android:id="@+id/past_data_list"

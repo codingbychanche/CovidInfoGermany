@@ -149,7 +149,7 @@ public class FragmentLocalData extends Fragment implements LocationListener {
                         bundeslandView.setText(r.getBundesland());
 
                         casesPer10KView.setText(r.getCasesPer10K() + "");
-                        casesPer10KView.setTextColor(CovidDataCasesColorCoder.getColor((int) r.getCasesPer10K()));
+                        casesPer10KView.setTextColor(getResources().getColor(CovidDataCasesColorCoder.getColor((int)r.getCasesPer10K())));
 
                         lasUpdateView.setText(r.getLastUpdate());
 

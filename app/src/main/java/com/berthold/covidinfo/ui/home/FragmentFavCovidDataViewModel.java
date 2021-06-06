@@ -22,8 +22,8 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
     //
     // Convenience fields for easy access to the local data....
     //
-    private String localName,localState,localCounty;
     private String statistics;
+    private CovidSearchResultData favLocationCovidData;
 
     // progressbar
     private MutableLiveData<Boolean> isUpdating = new MutableLiveData<>();
@@ -88,9 +88,7 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
         float cases100K = (float) covidData.get(0).getCasesPer10K();
 
         // Init convenience fields
-        localName=name;
-        localState=bundesland;
-        localCounty=bez;
+       favLocationCovidData=covidData.get(0);
 
         // Data base entries are only created when date last updated does not exist
         // for any entry matching name, bundesland and bez....
@@ -153,17 +151,7 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
     /**
      * Getters for convenience fields.
      */
-    public String getLocalName() {
-        return localName;
-    }
-
-    public String getLocalState(){
-        return localState;
-    }
-
-    public String getLocalCounty(){
-        return localCounty;
-    }
-
     public String getLocalStatistics(){return statistics;}
+
+    public CovidSearchResultData getLocalCovidData(){return favLocationCovidData;}
 }

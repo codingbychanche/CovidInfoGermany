@@ -22,8 +22,8 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
     //
     // Convenience fields for easy access to the local data....
     //
-    private String localName,localState,localCounty;
     private String localStatistics;
+    private CovidSearchResultData localLocationCovidData;
 
     //
     // Live data
@@ -85,11 +85,6 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
         String date = covidData.get(0).getLastUpdate();
         float cases100K = (float)covidData.get(0).getCasesPer10K();
 
-        // Init convenience fields
-        localName=name;
-        localState=bundesland;
-        localCounty=bez;
-
         // Data base entries are only created when date last updated does not exist
         // for any entry matching name, bundesland and bez....
         if (CovidDataBase.covidDataForThisDateExists(name, bundesland, bez, date, covidDataBase))
@@ -98,6 +93,9 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
             CovidDataBase.insert(name,bundesland,bez,cases100K,date,beenHere,covidDataBase);
             Log.v("DBMAKE","Entry:"+name+" for:"+date+" inserted....");
         }
+
+        // Init convenience fields
+        localLocationCovidData=covidData.get(0);
 
         // Get and publish entries for this location
         String result=CovidDataEvaluate.getTrend(name, bundesland, bez, covidDataBase);
@@ -121,18 +119,8 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
     /**
      * Getters for convenience fields.
      */
-    public String getLocalName() {
-        return localName;
-    }
-
-    public String getLocalState(){
-        return localState;
-    }
-
-    public String getLocalCounty(){
-        return localCounty;
-    }
-
     public String getLocalStatistics(){return localStatistics;}
+
+    public CovidSearchResultData getlocalLocationCovidData(){return localLocationCovidData;}
 
 }

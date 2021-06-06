@@ -36,7 +36,7 @@ public class FragmentLocationDetailView extends DialogFragment {
     static FragmentFavCovidDataViewModel fragmentFavCovidDataViewModel;
 
     // Fragments UI components
-    TextView townView, infoTextView;
+    TextView townView, infoTextView, casesView, updatedView;
     Button okButtonView;
     ListView pastDataListView;
 
@@ -71,14 +71,14 @@ public class FragmentLocationDetailView extends DialogFragment {
 
         // The view model(s)
         fragmentLocationDetailViewModel = ViewModelProviders.of(requireActivity()).get(FragmentLocationDetailViewModel.class);
-        fragmentLocalDataViewModel = ViewModelProviders.of(requireActivity()).get(FragmentLocalDataViewModel.class);
-        fragmentFavCovidDataViewModel=ViewModelProviders.of(requireActivity()).get(FragmentFavCovidDataViewModel.class);
 
         // These are this fragments UI components
         // Gets all objects (Buttons, EditText etc..) and set's them on
         // their listeners.....
         infoTextView = view.findViewById(R.id.fragment_location_detail_view_info_text);
-        townView =view.findViewById(R.id.town);
+        townView = view.findViewById(R.id.town);
+        casesView = view.findViewById(R.id.cases_per_10K);
+        updatedView = view.findViewById(R.id.updated);
 
         // This argument, passed when invoking this fragment, is a conditional
         // to decide to show detailed data either for local or for the fav location...
@@ -87,28 +87,49 @@ public class FragmentLocationDetailView extends DialogFragment {
         //
         // Show data for local- location
         //
-        if(showForFragment.equals("local")) {
-            String name = fragmentLocalDataViewModel.getLocalName();
-            String state = fragmentLocalDataViewModel.getLocalState();
-            String county = fragmentLocalDataViewModel.getLocalCounty();
+        String name = "-";
+        String state = "-";
+        String county = "-";
+        String update = "-";
+        int cases100K = 0, cases100KColorCode = 0;
+
+        if (showForFragment.equals("local")) {
+            fragmentLocalDataViewModel = ViewModelProviders.of(requireActivity()).get(FragmentLocalDataViewModel.class);
+
+            CovidSearchResultData r = fragmentLocalDataViewModel.getlocalLocationCovidData();
+            name = r.getName();
+            state = r.getBundesland();
+            county = r.getBez();
+            update = r.getLastUpdate();
+            cases100K = (int) r.getCasesPer10K();
+            cases100KColorCode = r.getCasesPer1KColorCode();
 
             fragmentLocationDetailViewModel.getPastDataForThisLocation(name, state, county);
-            townView.setText(fragmentLocalDataViewModel.getLocalName());
-            infoTextView.setText(HtmlCompat.fromHtml(fragmentFavCovidDataViewModel.getLocalStatistics(),0));
+            infoTextView.setText(HtmlCompat.fromHtml(fragmentLocalDataViewModel.getLocalStatistics(), 0));
         }
 
         //
         // Show data for fav location
         //
-        if(showForFragment.equals("fav")){
-            String name = fragmentFavCovidDataViewModel.getLocalName();
-            String state = fragmentFavCovidDataViewModel.getLocalState();
-            String county = fragmentFavCovidDataViewModel.getLocalCounty();
+        if (showForFragment.equals("fav")) {
+            fragmentFavCovidDataViewModel = ViewModelProviders.of(requireActivity()).get(FragmentFavCovidDataViewModel.class);
+
+            CovidSearchResultData r = fragmentFavCovidDataViewModel.getLocalCovidData();
+            name = r.getName();
+            state = r.getBundesland();
+            county = r.getBez();
+            update = r.getLastUpdate();
+            cases100K = (int) r.getCasesPer10K();
+            cases100KColorCode = r.getCasesPer1KColorCode();
 
             fragmentLocationDetailViewModel.getPastDataForThisLocation(name, state, county);
-            townView.setText(fragmentFavCovidDataViewModel.getLocalName());
-            infoTextView.setText(HtmlCompat.fromHtml(fragmentFavCovidDataViewModel.getLocalStatistics(),0));
+            infoTextView.setText(HtmlCompat.fromHtml(fragmentFavCovidDataViewModel.getLocalStatistics(), 0));
         }
+
+        townView.setText(name);
+        casesView.setText(cases100K + "");
+        updatedView.setText(update);
+        casesView.setTextColor(getResources().getColor(cases100KColorCode));
 
         //
         // Finish this fragment
@@ -134,10 +155,9 @@ public class FragmentLocationDetailView extends DialogFragment {
             @Override
             public void onChanged(@Nullable List<CovidSearchResultData> covidSearchResultData) {
 
-
                 if (covidSearchResultData != null) {
 
-                    String [] p=fragmentLocationDetailViewModel.buildPastDataList(covidSearchResultData);
+                    String[] p = fragmentLocationDetailViewModel.buildPastDataList(covidSearchResultData);
                     pastDataListView = view.findViewById(R.id.past_data_list);
                     ArrayAdapter pastListViewAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, p);
                     pastDataListView.setAdapter(pastListViewAdapter);

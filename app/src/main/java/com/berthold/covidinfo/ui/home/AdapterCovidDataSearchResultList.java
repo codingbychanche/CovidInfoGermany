@@ -81,8 +81,7 @@ public class AdapterCovidDataSearchResultList extends RecyclerView.Adapter<Adapt
         bundesland.setText(covidSearchResultDataList.get(position).getBundesland());
         updated.setText(covidSearchResultDataList.get(position).getLastUpdate());
         casesPer10K.setText(covidSearchResultDataList.get(position).getCasesPer10K() + "");
-
-        casesPer10K.setTextColor(covidSearchResultDataList.get(position).getCasesPer1KColorCode());
+        casesPer10K.setTextColor(resources.getColor(covidSearchResultDataList.get(position).getCasesPer1KColorCode()));
     }
 
     // Return the size of your dataset (invoked by the layout manager)

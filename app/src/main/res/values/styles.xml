@@ -7,12 +7,12 @@
         <item name="colorAccent">#2196F3</item>
     </style>
 
-
-    <!-- Dialog Boxes -->
-    <style name="DialogBoxStyleTitle" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">20dp</item>
-        <item name="android:textStyle">bold</item>
+    <!-- App specific color codes -->
+    <!-- Global -->
+    <style name="remarkText" parent="TextAppearance.AppCompat">
+    <item name="android:textSize">8dp</item>
     </style>
+
 
     <!-- Activity's -->
     <style name="ActivityTitelText" parent="TextAppearance.AppCompat">
@@ -30,13 +30,17 @@
     </style>
 
     <style name="ActivityTextBody" parent="TextAppearance.AppCompat">
-
         <item name="android:textSize">15dp</item>
     </style>
 
     <!-- Dialog Boxes -->
+    <style name="DialogBoxStyleTitle" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">20dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="DialogBoxTextBody" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">8dp</item>
+        <item name="android:textSize">15dp</item>
     </style>
 
     <!--Misc..-->
