@@ -60,6 +60,7 @@
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@+id/start">
         <OnSwipe
+           motion:touchRegionId="@+id/fragment_fav_covid_data_view" />
             motion:dragDirection="dragUp"
             motion:duration="10000"
             motion:touchAnchorSide="bottom"
