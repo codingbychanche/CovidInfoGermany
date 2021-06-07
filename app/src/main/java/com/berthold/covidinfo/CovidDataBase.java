@@ -263,4 +263,23 @@ public class CovidDataBase {
             Log.v("DBMAKE", e.toString());
         }
     }
+
+    /**
+     * Updates the 'beenHere' flag of an existing entry for the passed location.
+     * The unique identifiers for the location are name, bundesland, bez and the date.
+     *
+     * @param name
+     * @param bundesland
+     * @param bez
+     * @param lastUpdate
+     * @param beenHere
+     * @param conn
+     */
+    public static void updateExistingEntry(String name,String bundesland,String bez,String lastUpdate,boolean beenHere,Connection conn){
+        try {
+            conn.createStatement().executeUpdate("update covid set beenhere="+beenHere+" where (lastupdate='" +lastUpdate+"' and name='"+name+"' and bundesland='"+bundesland+"' and bez='"+bez+"')");
+        } catch(SQLException e){
+            Log.v("DBMAKE", e.toString());
+        }
+    }
 }

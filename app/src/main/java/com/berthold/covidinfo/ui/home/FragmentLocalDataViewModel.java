@@ -1,5 +1,6 @@
 package com.berthold.covidinfo.ui.home;
 
+import android.media.session.PlaybackState;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -65,8 +66,24 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
     }
 
     /**
-     * Receives the data from the network connection, checks the data was already saved inside the
-     * database and if not, saves it there.
+     * Receives the data from the network connection and decides if the entry should be
+     * added to the data base or just updated.
+     *
+     * The logic behind the decision to save or not to save an entry assumes the following:
+     *
+     * -    The date the covid dataset was updated=the current date. This is not always true because
+     *      the covid database is updated daily at around 12h pm. So if one visits a location, say
+     *      on the 5. of June before that time and the covid dataset was updated on the 4. of june
+     *      then the entry of the visit will be made for the 4 of June....
+     *      toDo: Thats a bug in the current version.....
+     *
+     * -    If an entry for the current date and location already exists it is assumed that
+     *      this entry was made by the {@link FragmentFavCovidDataViewModel}. In that case
+     *      this entry is updated, the beenHere flag is set to true.
+     *
+     * -    The  {@link FragmentFavCovidDataViewModel} on the other hand will only create an
+     *      entry into the database, if the same entry not already exists. This would be the case
+     *      if the fav. location selected is was or is visited at the same date.
      *
      * Database is searched and, if entries for this location where saved, information is shown....
      *
@@ -74,7 +91,6 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
      */
     @Override
     public void receive(List<CovidSearchResultData> covidData) {
-        covidDataAsJson.postValue(covidData);
 
         Connection covidDataBase = MainActivity.covidDataBase;
         boolean beenHere = true;
@@ -85,22 +101,34 @@ public class FragmentLocalDataViewModel extends ViewModel implements ThreadSearc
         String date = covidData.get(0).getLastUpdate();
         float cases100K = (float)covidData.get(0).getCasesPer10K();
 
-        // Data base entries are only created when date last updated does not exist
-        // for any entry matching name, bundesland and bez....
-        if (CovidDataBase.covidDataForThisDateExists(name, bundesland, bez, date, covidDataBase))
-            Log.v("DBMAKE", " Exists");
-        else {
-            CovidDataBase.insert(name,bundesland,bez,cases100K,date,beenHere,covidDataBase);
-            Log.v("DBMAKE","Entry:"+name+" for:"+date+" inserted....");
+        // No name, then there is no dataset for the current location in the database on the server.
+        if (name.isEmpty()){
+            covidData.get(0).setName("Keine Date für diesen Ort gefunden.");
+            covidDataAsJson.postValue(covidData);
+            statisticsData.postValue("-");
+        }else {
+            // Publish result.
+            covidDataAsJson.postValue(covidData);
+
+            // Add to database
+            if (CovidDataBase.covidDataForThisDateExists(name, bundesland, bez, date, covidDataBase)) {
+                // Update existing entry...
+                Log.v("DBMAKE", " Exists, update");
+                CovidDataBase.updateExistingEntry(name, bundesland, bez, date, beenHere, covidDataBase);
+            } else {
+                // Create a new entry
+                CovidDataBase.insert(name, bundesland, bez, cases100K, date, beenHere, covidDataBase);
+                Log.v("DBMAKE", "Entry:" + name + " for:" + date + " inserted....");
+            }
+
+            // Init convenience fields
+            localLocationCovidData = covidData.get(0);
+
+            // Get and publish entries for this location
+            String result = CovidDataEvaluate.getTrend(name, bundesland, bez, covidDataBase);
+            statisticsData.postValue(result);
+            localStatistics = result;
         }
-
-        // Init convenience fields
-        localLocationCovidData=covidData.get(0);
-
-        // Get and publish entries for this location
-        String result=CovidDataEvaluate.getTrend(name, bundesland, bez, covidDataBase);
-        statisticsData.postValue(result);
-        localStatistics=result;
     }
 
     /**

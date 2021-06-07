@@ -64,8 +64,13 @@ public class FragmentFavCovidDataViewModel extends ViewModel implements FavCovid
 
 
     /**
-     * Receives the covid data from the network
-     * <p>
+     * Receives the covid data from the network and adds them to the database.
+     *
+     * Entries to the database are only made when for the location and the date
+     * the covid dataset was updated does not already exist. In that case it is assumed that
+     * the entry was made by {@link FragmentLocalDataViewModel}.
+     *
+     *
      * todo DRY! (see FragmentLocalViewModel)
      *
      * @param covidData

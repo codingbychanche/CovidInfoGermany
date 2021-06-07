@@ -294,9 +294,6 @@ public class FragmentLocalData extends Fragment implements LocationListener {
                     city = addresses.get(0).getLocality();
                     adminArea = addresses.get(0).getAdminArea();
 
-                    Log.v("ADDRESSES", "Size" + addresses.size() + "");
-
-
                     for (int n = 0; n <= addresses.size() - 1; n++)
                         Log.v("ADDRESSES", addresses.get(n).getAddressLine(n));
 
